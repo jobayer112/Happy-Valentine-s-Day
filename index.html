@@ -1,0 +1,654 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Panel - Valentine Event</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #fce4ec;
+            margin: 0;
+            padding: 20px;
+            color: #333;
+        }
+
+        .admin-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+        }
+
+        h1, h2 { 
+            color: #d81b60; 
+        }
+
+        h1 {
+            font-size: 2.2rem;
+            margin-bottom: 10px;
+        }
+
+        .card-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 25px;
+            margin-bottom: 40px;
+        }
+
+        .stat-card {
+            background: linear-gradient(135deg, #ff80ab, #d81b60);
+            color: white;
+            padding: 25px;
+            border-radius: 12px;
+            text-align: center;
+            box-shadow: 0 5px 15px rgba(216, 27, 96, 0.2);
+            transition: transform 0.3s;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .stat-card h2 {
+            color: white;
+            font-size: 2.5rem;
+            margin: 10px 0;
+        }
+
+        .stat-card p {
+            font-size: 1rem;
+            opacity: 0.9;
+        }
+
+        .section-box {
+            border: 1px solid #e0e0e0;
+            padding: 25px;
+            border-radius: 12px;
+            margin-bottom: 25px;
+            background: #fff;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+        }
+
+        .input-group {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 15px;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+
+        input {
+            padding: 12px 15px;
+            margin: 5px 0;
+            border-radius: 8px;
+            border: 1px solid #ccc;
+            flex: 1;
+            min-width: 250px;
+            font-size: 1rem;
+            transition: border-color 0.3s;
+        }
+
+        input:focus {
+            outline: none;
+            border-color: #d81b60;
+            box-shadow: 0 0 0 2px rgba(216, 27, 96, 0.1);
+        }
+        
+        button {
+            padding: 12px 25px;
+            margin: 5px 0;
+            border-radius: 8px;
+            border: none;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 1rem;
+            transition: all 0.3s;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .primary-btn {
+            background: #d81b60;
+            color: white;
+        }
+
+        .primary-btn:hover { 
+            background: #ad1457;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 12px rgba(216, 27, 96, 0.3);
+        }
+
+        .danger-btn {
+            background: #e53935;
+            color: white;
+            padding: 8px 15px;
+            font-size: 0.9rem;
+        }
+
+        .danger-btn:hover {
+            background: #c62828;
+        }
+
+        .secondary-btn {
+            background: #555;
+            color: white;
+        }
+
+        .secondary-btn:hover {
+            background: #333;
+        }
+
+        /* Table Styles */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+            font-size: 0.95rem;
+        }
+
+        th, td {
+            border: 1px solid #e0e0e0;
+            padding: 12px 15px;
+            text-align: left;
+        }
+
+        th { 
+            background-color: #f8bbd0; 
+            color: #880e4f;
+            font-weight: 600;
+        }
+        
+        tr:hover {
+            background-color: #f9f9f9;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+
+        .couple-badge {
+            background-color: #ffebee;
+            color: #d81b60;
+        }
+
+        .single-badge {
+            background-color: #f3e5f5;
+            color: #7b1fa2;
+        }
+
+        .task-list {
+            list-style: none;
+            padding: 0;
+            margin-top: 20px;
+        }
+
+        .task-item {
+            background: #f9f9f9;
+            margin: 10px 0;
+            padding: 15px;
+            border-radius: 8px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-left: 4px solid #d81b60;
+        }
+
+        .task-info {
+            flex: 1;
+        }
+
+        .task-title {
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+
+        .task-link {
+            color: #d81b60;
+            text-decoration: none;
+            font-size: 0.9rem;
+        }
+
+        .task-link:hover {
+            text-decoration: underline;
+        }
+
+        #loader {
+            position: fixed; 
+            top: 0; 
+            left: 0; 
+            width: 100%; 
+            height: 100%;
+            background: rgba(255, 255, 255, 0.95); 
+            display: flex; 
+            justify-content: center; 
+            align-items: center;
+            z-index: 9999;
+            flex-direction: column;
+        }
+
+        .loader-spinner {
+            border: 5px solid #f3f3f3;
+            border-top: 5px solid #d81b60;
+            border-radius: 50%;
+            width: 60px;
+            height: 60px;
+            animation: spin 1s linear infinite;
+            margin-bottom: 20px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid #f0f0f0;
+        }
+
+        .alert {
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            display: none;
+        }
+
+        .success-alert {
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .error-alert {
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+
+        @media (max-width: 768px) {
+            .admin-container {
+                padding: 15px;
+            }
+            
+            .card-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .input-group {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            
+            input {
+                min-width: 100%;
+            }
+            
+            table {
+                display: block;
+                overflow-x: auto;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div id="loader">
+    <div class="loader-spinner"></div>
+    <h2>এডমিন প্রোফাইল যাচাই করা হচ্ছে...</h2>
+</div>
+
+<div class="admin-container" id="adminContent" style="display: none;">
+    <div class="header">
+        <div>
+            <h1><i class="fas fa-crown"></i> Valentine ইভেন্ট - এডমিন ড্যাশবোর্ড</h1>
+            <p style="color: #666;">ইউজার এবং টাস্ক ম্যানেজমেন্ট সেন্টার</p>
+        </div>
+        <button onclick="logout()" class="secondary-btn">
+            <i class="fas fa-sign-out-alt"></i> লগআউট
+        </button>
+    </div>
+
+    <div id="alertBox" class="alert"></div>
+
+    <div class="card-grid">
+        <div class="stat-card">
+            <i class="fas fa-users fa-2x"></i>
+            <h2 id="totalUsers">0</h2>
+            <p>মোট রেজিস্টার্ড ইউজার</p>
+        </div>
+        <div class="stat-card">
+            <i class="fas fa-tasks fa-2x"></i>
+            <h2 id="totalTasks">0</h2>
+            <p>সক্রিয় টাস্ক</p>
+        </div>
+        <div class="stat-card">
+            <i class="fas fa-heart fa-2x"></i>
+            <h2 id="totalCouples">0</h2>
+            <p>কাপল ইউজার</p>
+        </div>
+        <div class="stat-card">
+            <i class="fas fa-user fa-2x"></i>
+            <h2 id="totalSingles">0</h2>
+            <p>সিংগেল ইউজার</p>
+        </div>
+    </div>
+
+    <div class="section-box">
+        <h2><i class="fas fa-plus-circle"></i> নতুন টাস্ক যোগ করুন</h2>
+        <div class="input-group">
+            <input type="text" id="taskTitle" placeholder="টাস্কের নাম (যেমন: Facebook ভিজিট করুন)">
+            <input type="text" id="taskLink" placeholder="লিংক (https://...)">
+            <button onclick="addTask()" class="primary-btn">
+                <i class="fas fa-paper-plane"></i> টাস্ক পাবলিশ করুন
+            </button>
+        </div>
+
+        <h3 style="margin-top: 30px; color: #d81b60;"><i class="fas fa-list"></i> বর্তমান টাস্ক তালিকা:</h3>
+        <ul class="task-list" id="taskListDisplay"></ul>
+    </div>
+
+    <div class="section-box">
+        <h2><i class="fas fa-user-friends"></i> ইউজার তালিকা ও ডিটেইলস</h2>
+        <div style="margin-bottom: 15px; display: flex; justify-content: space-between; align-items: center;">
+            <p>ইউজাররা তাদের ইনভাইটেশন সংখ্যা অনুযায়ী সাজানো হয়েছে</p>
+            <button onclick="refreshUsers()" class="primary-btn" style="padding: 8px 15px;">
+                <i class="fas fa-sync-alt"></i> রিফ্রেশ
+            </button>
+        </div>
+        <div style="overflow-x:auto;">
+            <table>
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>নাম ও পার্টনার</th>
+                        <th>টাইপ</th>
+                        <th>টাস্ক সম্পন্ন</th>
+                        <th>ইনভাইট</th>
+                        <th>রেফার করেছে</th>
+                        <th>ইমেইল</th>
+                        <th>অ্যাকশন</th>
+                    </tr>
+                </thead>
+                <tbody id="userTableBody">
+                    <!-- User data will be loaded here -->
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div style="text-align: center; margin-top: 30px; color: #777; font-size: 0.9rem; padding-top: 20px; border-top: 1px solid #eee;">
+        <p>Valentine ইভেন্ট অ্যাডমিন প্যানেল | &copy; 2023 | শুধুমাত্র অনুমোদিত এডমিনের জন্য</p>
+    </div>
+
+</div>
+
+<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
+
+<script>
+    // Firebase Configuration
+    const firebaseConfig = {
+        apiKey: "AIzaSyAxvrjzR-79a4SlbS_Kq6ugnrikN4M_Xuw",
+        authDomain: "adclickearn-898a8.firebaseapp.com",
+        databaseURL: "https://adclickearn-898a8-default-rtdb.firebaseio.com",
+        projectId: "adclickearn-898a8",
+        storageBucket: "adclickearn-898a8.firebasestorage.app",
+        messagingSenderId: "554825480191",
+        appId: "1:554825480191:web:a99a7526a38fdba4ccd9ca",
+        measurementId: "G-LZDJ2G5Q8V"
+    };
+
+    // Initialize Firebase
+    if (!firebase.apps.length) {
+        firebase.initializeApp(firebaseConfig);
+    }
+    const auth = firebase.auth();
+    const db = firebase.database();
+    
+    // Admin UID (Replace with your actual admin UID)
+    const ADMIN_UID = "9TEV5AX90PbRyP1LcD42xLdLLVl1";
+
+    // Show alert message
+    function showAlert(message, type = "success") {
+        const alertBox = document.getElementById('alertBox');
+        alertBox.className = `alert ${type}-alert`;
+        alertBox.textContent = message;
+        alertBox.style.display = 'block';
+        
+        setTimeout(() => {
+            alertBox.style.display = 'none';
+        }, 3000);
+    }
+
+    // Security Check
+    auth.onAuthStateChanged((user) => {
+        const loader = document.getElementById('loader');
+        const content = document.getElementById('adminContent');
+
+        if (user) {
+            if (user.uid === ADMIN_UID) {
+                // Admin verified
+                setTimeout(() => {
+                    loader.style.display = 'none';
+                    content.style.display = 'block';
+                    initAdminPanel();
+                }, 1000);
+            } else {
+                // Not admin
+                alert("আপনার এই পেজে অ্যাক্সেসের অনুমতি নেই!");
+                window.location.href = "index.html";
+            }
+        } else {
+            // Not logged in
+            alert("অনুগ্রহ করে আগে লগইন করুন।");
+            window.location.href = "index.html";
+        }
+    });
+
+    function initAdminPanel() {
+        loadUsers();
+        loadTasks();
+        
+        // Update admin panel every 30 seconds
+        setInterval(() => {
+            loadUsers();
+            loadTasks();
+        }, 30000);
+    }
+
+    // --- Task Management Functions ---
+    function addTask() {
+        const title = document.getElementById('taskTitle').value.trim();
+        const url = document.getElementById('taskLink').value.trim();
+
+        if (!title || !url) {
+            showAlert("টাস্কের নাম এবং লিংক অবশ্যই দিতে হবে!", "error");
+            return;
+        }
+
+        // Validate URL
+        if (!url.startsWith('http://') && !url.startsWith('https://')) {
+            showAlert("সঠিক লিংক দিন (http:// বা https:// দিয়ে শুরু করতে হবে)", "error");
+            return;
+        }
+
+        db.ref('tasks').push({
+            title: title,
+            url: url,
+            createdAt: new Date().toISOString()
+        }).then(() => {
+            showAlert("টাস্ক সফলভাবে যোগ হয়েছে!");
+            document.getElementById('taskTitle').value = "";
+            document.getElementById('taskLink').value = "";
+        }).catch(error => {
+            showAlert("টাস্ক যোগ করতে সমস্যা: " + error.message, "error");
+        });
+    }
+
+    function loadTasks() {
+        db.ref('tasks').on('value', snapshot => {
+            const tasks = snapshot.val();
+            const list = document.getElementById('taskListDisplay');
+            list.innerHTML = "";
+            let count = 0;
+
+            if (tasks) {
+                Object.keys(tasks).forEach(key => {
+                    count++;
+                    const task = tasks[key];
+                    list.innerHTML += `
+                        <li class="task-item">
+                            <div class="task-info">
+                                <div class="task-title">${count}. ${task.title}</div>
+                                <a href="${task.url}" target="_blank" class="task-link">
+                                    <i class="fas fa-external-link-alt"></i> ${task.url}
+                                </a>
+                            </div>
+                            <button class="danger-btn" onclick="deleteTask('${key}')">
+                                <i class="fas fa-trash"></i> ডিলিট
+                            </button>
+                        </li>
+                    `;
+                });
+            } else {
+                list.innerHTML = '<p style="text-align:center; color:#777;">কোন টাস্ক নেই</p>';
+            }
+            document.getElementById('totalTasks').innerText = count;
+        });
+    }
+
+    function deleteTask(key) {
+        if(confirm("আপনি কি নিশ্চিত এই টাস্কটি ডিলিট করতে চান?")) {
+            db.ref('tasks/' + key).remove()
+                .then(() => {
+                    showAlert("টাস্ক ডিলিট করা হয়েছে!");
+                })
+                .catch(error => {
+                    showAlert("টাস্ক ডিলিট করতে সমস্যা: " + error.message, "error");
+                });
+        }
+    }
+
+    // --- User Management Functions ---
+    function loadUsers() {
+        db.ref('users').on('value', snapshot => {
+            const users = snapshot.val();
+            const tbody = document.getElementById('userTableBody');
+            tbody.innerHTML = "";
+            let count = 0;
+            let coupleCount = 0;
+            let singleCount = 0;
+
+            if (users) {
+                // Sort users by Invites (High to Low)
+                const userArray = Object.entries(users).map(([id, user]) => ({ id, ...user }));
+                const sortedUsers = userArray.sort((a, b) => (b.invites || 0) - (a.invites || 0));
+
+                sortedUsers.forEach(user => {
+                    count++;
+                    if (user.type === 'couple') coupleCount++;
+                    if (user.type === 'single') singleCount++;
+                    
+                    const partnerInfo = user.partnerName ? `<br><span style="color:#d81b60"><i class="fas fa-heart"></i> ${user.partnerName}</span>` : '';
+                    const typeBadge = user.type === 'couple' 
+                        ? '<span class="badge couple-badge"><i class="fas fa-heart"></i> কাপল</span>'
+                        : '<span class="badge single-badge"><i class="fas fa-user"></i> সিঙ্গেল</span>';
+                    
+                    const progress = user.tasksCompleted || 0;
+                    const progressPercent = Math.min((progress / 20) * 100, 100);
+                    
+                    const row = `
+                        <tr>
+                            <td>${count}</td>
+                            <td>
+                                <strong>${user.name || 'নাম নেই'}</strong>
+                                ${partnerInfo}
+                            </td>
+                            <td>${typeBadge}</td>
+                            <td>
+                                ${progress} / 20
+                                <div style="width: 100px; height: 6px; background: #e0e0e0; border-radius: 3px; margin-top: 5px;">
+                                    <div style="width: ${progressPercent}%; height: 100%; background: #4caf50; border-radius: 3px;"></div>
+                                </div>
+                            </td>
+                            <td style="font-weight:bold; font-size:1.1rem; color: #d81b60;">${user.invites || 0}</td>
+                            <td>${user.invitedBy === 'none' ? 'সেল্ফ' : user.invitedBy || 'সেল্ফ'}</td>
+                            <td>${user.email || 'ইমেইল নেই'}</td>
+                            <td>
+                                <button class="danger-btn" onclick="deleteUser('${user.id}')">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </td>
+                        </tr>
+                    `;
+                    tbody.innerHTML += row;
+                });
+            } else {
+                tbody.innerHTML = `
+                    <tr>
+                        <td colspan="8" style="text-align:center; padding: 30px; color:#777;">
+                            <i class="fas fa-users fa-2x" style="margin-bottom:10px; display:block;"></i>
+                            কোন ইউজার নেই
+                        </td>
+                    </tr>
+                `;
+            }
+            
+            document.getElementById('totalUsers').innerText = count;
+            document.getElementById('totalCouples').innerText = coupleCount;
+            document.getElementById('totalSingles').innerText = singleCount;
+        });
+    }
+
+    function deleteUser(userId) {
+        if(confirm("আপনি কি নিশ্চিত এই ইউজার ডিলিট করতে চান? এই অপারেশন ফেরত আনা যাবে না।")) {
+            db.ref('users/' + userId).remove()
+                .then(() => {
+                    showAlert("ইউজার সফলভাবে ডিলিট করা হয়েছে!");
+                })
+                .catch(error => {
+                    showAlert("ইউজার ডিলিট করতে সমস্যা: " + error.message, "error");
+                });
+        }
+    }
+
+    function refreshUsers() {
+        loadUsers();
+        showAlert("ইউজার তালিকা রিফ্রেশ করা হয়েছে!");
+    }
+
+    function logout() {
+        if(confirm("আপনি কি লগআউট করতে চান?")) {
+            auth.signOut().then(() => {
+                window.location.href = "index.html";
+            }).catch(error => {
+                showAlert("লগআউট করতে সমস্যা: " + error.message, "error");
+            });
+        }
+    }
+
+    // Prevent accidental page reload
+    window.addEventListener('beforeunload', function (e) {
+        e.preventDefault();
+        e.returnValue = '';
+    });
+</script>
+
+</body>
+</html>
