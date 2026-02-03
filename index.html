@@ -56,13 +56,42 @@
             padding-bottom: env(safe-area-inset-bottom);
         }
 
+        /* ====== LANGUAGE SWITCHER ====== */
+        .language-switcher {
+            position: fixed;
+            top: 10px;
+            right: 10px;
+            z-index: 1000;
+        }
+
+        .lang-btn {
+            background: rgba(255, 255, 255, 0.9);
+            border: 2px solid var(--primary-2026);
+            color: var(--primary-2026);
+            border-radius: 20px;
+            padding: 6px 12px;
+            font-size: 0.8rem;
+            font-weight: 700;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+            transition: all 0.3s;
+        }
+
+        .lang-btn:hover {
+            background: var(--primary-2026);
+            color: white;
+        }
+
         /* ====== CONTAINER ====== */
         .container {
             max-width: 100%;
             width: 100%;
             margin: 0 auto;
             padding: 15px;
-            padding-bottom: 30px;
+            padding-bottom: 80px;
         }
 
         /* ====== HEADER ২০২৬ ====== */
@@ -75,7 +104,7 @@
         .year-badge {
             position: absolute;
             top: 10px;
-            right: 10px;
+            left: 10px;
             background: var(--primary-gradient);
             color: white;
             font-size: 0.7rem;
@@ -102,6 +131,16 @@
             color: var(--text-light);
         }
 
+        /* ====== SECTION NAVIGATION ====== */
+        .dashboard-section {
+            display: none;
+            animation: fadeIn 0.4s ease;
+        }
+
+        .dashboard-section.active {
+            display: block;
+        }
+
         /* ====== MOBILE-FRIENDLY GLASS CARDS ====== */
         .glass-card {
             background: var(--glass);
@@ -126,11 +165,6 @@
             height: 4px;
             background: var(--primary-gradient);
             border-radius: 20px 20px 0 0;
-        }
-
-        .glass-card:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 10px 25px rgba(255, 26, 94, 0.2);
         }
 
         /* ====== COMPACT INPUT GROUPS ====== */
@@ -160,13 +194,36 @@
             font-family: 'Hind Siliguri', sans-serif;
             font-size: 1rem;
             color: var(--text-dark);
-            appearance: none;
-            -webkit-appearance: none;
         }
 
-        .input-group input:focus, .input-group select:focus { 
-            border-color: var(--primary-2026); 
-            box-shadow: 0 0 0 3px rgba(255, 26, 94, 0.1); 
+        /* ====== LANGUAGE SELECTION IN REGISTRATION ====== */
+        .language-selection {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 16px;
+        }
+
+        .lang-option {
+            flex: 1;
+            text-align: center;
+            padding: 12px;
+            border: 2px solid #ffd1dc;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s;
+            background: white;
+        }
+
+        .lang-option.selected {
+            border-color: var(--primary-2026);
+            background: rgba(255, 26, 94, 0.1);
+            font-weight: 700;
+            color: var(--primary-2026);
+        }
+
+        .lang-flag {
+            font-size: 1.5rem;
+            margin-bottom: 5px;
         }
 
         /* ====== COMPACT BUTTONS ====== */
@@ -187,32 +244,11 @@
             align-items: center;
             justify-content: center;
             gap: 10px;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .btn-primary::after {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
-            transition: 0.5s;
-        }
-
-        .btn-primary:hover::after {
-            left: 100%;
         }
 
         .btn-primary:hover { 
             transform: translateY(-2px); 
             box-shadow: 0 6px 16px rgba(255, 26, 94, 0.4); 
-        }
-
-        .btn-primary:active {
-            transform: translateY(0);
         }
 
         /* ====== ULTRA-COMPACT STATS GRID ====== */
@@ -234,10 +270,6 @@
             display: flex;
             flex-direction: column;
             justify-content: center;
-        }
-
-        .stat-item:hover {
-            transform: scale(1.03);
         }
 
         .stat-item i { 
@@ -343,12 +375,6 @@
             background: var(--success); 
             color: white; 
             cursor: default;
-            box-shadow: 0 3px 8px rgba(0, 200, 83, 0.3);
-        }
-
-        .btn-task:disabled {
-            opacity: 0.7;
-            cursor: not-allowed;
         }
 
         /* ====== COMPACT PROGRESS BAR ====== */
@@ -390,18 +416,6 @@
             overflow: hidden;
             box-shadow: 0 8px 20px rgba(74, 0, 51, 0.2);
             margin-top: 15px;
-        }
-
-        .ref-box::before {
-            content: '';
-            position: absolute;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background: radial-gradient(circle, rgba(255,255,255,0.05) 1px, transparent 1px);
-            background-size: 15px 15px;
-            opacity: 0.1;
         }
 
         .ref-box h4 { 
@@ -449,7 +463,6 @@
 
         .prize-item:hover {
             transform: scale(1.03);
-            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
         }
 
         .prize-icon {
@@ -487,12 +500,6 @@
             28% { transform: scale(1); }
             42% { transform: scale(1.1); }
             70% { transform: scale(1); }
-        }
-
-        @keyframes pulse {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.05); }
-            100% { transform: scale(1); }
         }
 
         /* ====== UTILITY CLASSES ====== */
@@ -553,7 +560,7 @@
         /* ====== MOBILE TOAST ====== */
         .toast {
             position: fixed;
-            bottom: 20px;
+            bottom: 70px;
             left: 15px;
             right: 15px;
             background: var(--text-dark);
@@ -603,31 +610,7 @@
             font-size: 0.85rem;
         }
 
-        /* ====== MESSAGES ====== */
-        .message {
-            padding: 10px 12px;
-            border-radius: 12px;
-            margin-bottom: 12px;
-            font-size: 0.85rem;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            animation: slideIn 0.3s ease;
-        }
-
-        .message.error {
-            background: rgba(255, 68, 68, 0.1);
-            border: 1px solid rgba(255, 68, 68, 0.3);
-            color: var(--error);
-        }
-
-        .message.success {
-            background: rgba(0, 200, 83, 0.1);
-            border: 1px solid rgba(0, 200, 83, 0.3);
-            color: var(--success);
-        }
-
-        /* ====== MOBILE NAVIGATION (Optional) ====== */
+        /* ====== MOBILE NAVIGATION ====== */
         .mobile-nav {
             position: fixed;
             bottom: 0;
@@ -656,6 +639,7 @@
             padding: 8px;
             border-radius: 12px;
             min-width: 60px;
+            cursor: pointer;
         }
 
         .nav-item.active {
@@ -671,6 +655,7 @@
         @media (max-width: 480px) {
             .container {
                 padding: 12px;
+                padding-bottom: 70px;
             }
             
             .app-header h1 {
@@ -701,10 +686,6 @@
                 flex-direction: column;
                 align-items: stretch;
                 gap: 12px;
-            }
-            
-            .task-info {
-                gap: 10px;
             }
             
             .task-icon {
@@ -764,6 +745,7 @@
             .container {
                 max-width: 500px;
                 padding: 20px;
+                padding-bottom: 80px;
             }
             
             .app-header h1 {
@@ -813,18 +795,22 @@
                 border-color: rgba(255, 26, 94, 0.3);
                 color: white;
             }
-            
-            .progress-bar {
-                background: rgba(255, 26, 94, 0.2);
-            }
         }
     </style>
 </head>
 <body>
 
+<!-- Language Switcher -->
+<div class="language-switcher" id="languageSwitcher">
+    <button class="lang-btn" onclick="toggleLanguage()">
+        <i class="fas fa-globe"></i>
+        <span id="currentLang">বাংলা</span>
+    </button>
+</div>
+
 <!-- Offline Indicator -->
 <div id="offlineIndicator">
-    <i class="fas fa-wifi-slash"></i> আপনি অফলাইনে আছেন
+    <i class="fas fa-wifi-slash"></i> <span id="offlineText">আপনি অফলাইনে আছেন</span>
 </div>
 
 <!-- Toast Container -->
@@ -833,7 +819,7 @@
 <!-- Loader -->
 <div id="loader">
     <div class="heart">❤️</div>
-    <p class="loader-text">২০২৬ Valentine's Day...</p>
+    <p class="loader-text" id="loaderText">২০২৬ Valentine's Day...</p>
 </div>
 
 <div class="container">
@@ -841,78 +827,93 @@
     <!-- Header with 2026 Badge -->
     <header class="app-header">
         <div class="year-badge">২০২৬</div>
-        <h1>Happy Valentine's</h1>
-        <p>টাস্ক করুন, জিতুন পুরস্কার!</p>
+        <h1 id="appTitle">Happy Valentine's</h1>
+        <p id="appSubtitle">টাস্ক করুন, জিতুন পুরস্কার!</p>
     </header>
 
     <!-- Auth Section -->
     <div id="authSection" class="glass-card">
         <!-- Login Form -->
         <div id="loginForm">
-            <h2 style="text-align:center; margin:0 0 20px 0; color: var(--text-dark); font-size: 1.3rem;">লগইন</h2>
+            <h2 style="text-align:center; margin:0 0 20px 0; color: var(--text-dark); font-size: 1.3rem;" id="loginTitle">লগইন</h2>
             <div id="loginMessage"></div>
             <div class="input-group">
-                <label><i class="fas fa-envelope"></i> ইমেইল</label>
+                <label><i class="fas fa-envelope"></i> <span id="emailLabel">ইমেইল</span></label>
                 <input type="email" id="loginEmail" placeholder="you@example.com" autocomplete="email">
             </div>
             <div class="input-group">
-                <label><i class="fas fa-lock"></i> পাসওয়ার্ড</label>
+                <label><i class="fas fa-lock"></i> <span id="passwordLabel">পাসওয়ার্ড</span></label>
                 <input type="password" id="loginPass" placeholder="••••••" autocomplete="current-password">
             </div>
             <button class="btn-primary" onclick="login()" id="loginBtn">
-                <i class="fas fa-sign-in-alt"></i> লগইন
+                <i class="fas fa-sign-in-alt"></i> <span id="loginBtnText">লগইন</span>
             </button>
             <p style="text-align:center; font-size:0.85rem; margin-top:15px; color: var(--text-light);">
-                অ্যাকাউন্ট নেই? 
+                <span id="noAccountText">অ্যাকাউন্ট নেই?</span> 
                 <a href="javascript:void(0)" onclick="toggleAuth('register')" style="color:var(--primary-2026); font-weight:700; text-decoration:none;">
-                    রেজিস্ট্রেশন
+                    <span id="registerLinkText">রেজিস্ট্রেশন</span>
                 </a>
             </p>
         </div>
 
         <!-- Register Form -->
         <div id="registerForm" class="hidden">
-            <h2 style="text-align:center; margin:0 0 20px 0; color: var(--text-dark); font-size: 1.3rem;">রেজিস্ট্রেশন</h2>
+            <h2 style="text-align:center; margin:0 0 20px 0; color: var(--text-dark); font-size: 1.3rem;" id="registerTitle">রেজিস্ট্রেশন</h2>
             <div id="registerMessage"></div>
             
+            <!-- Language Selection -->
             <div class="input-group">
-                <label><i class="fas fa-users"></i> অ্যাকাউন্ট টাইপ</label>
+                <label><i class="fas fa-language"></i> <span id="preferredLangLabel">পছন্দের ভাষা</span></label>
+                <div class="language-selection">
+                    <div class="lang-option selected" onclick="selectLanguage('bn')">
+                        <div class="lang-flag">🇧🇩</div>
+                        <div>বাংলা</div>
+                    </div>
+                    <div class="lang-option" onclick="selectLanguage('en')">
+                        <div class="lang-flag">🇺🇸</div>
+                        <div>English</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="input-group">
+                <label><i class="fas fa-users"></i> <span id="accountTypeLabel">অ্যাকাউন্ট টাইপ</span></label>
                 <select id="userType" onchange="handleUserType()">
-                    <option value="single">সিঙ্গেল</option>
-                    <option value="couple">কাপল</option>
+                    <option value="single" id="singleOption">সিঙ্গেল</option>
+                    <option value="couple" id="coupleOption">কাপল</option>
                 </select>
             </div>
             
             <div class="input-group">
-                <label><i class="fas fa-user"></i> আপনার নাম</label>
+                <label><i class="fas fa-user"></i> <span id="yourNameLabel">আপনার নাম</span></label>
                 <input type="text" id="regName" placeholder="নাম লিখুন" autocomplete="name">
             </div>
             
             <div class="input-group hidden" id="partnerInputBox">
-                <label><i class="fas fa-heart"></i> সঙ্গীর নাম</label>
+                <label><i class="fas fa-heart"></i> <span id="partnerNameLabel">সঙ্গীর নাম</span></label>
                 <input type="text" id="partnerName" placeholder="পার্টনারের নাম">
             </div>
             
             <div class="input-group">
-                <label><i class="fas fa-envelope"></i> ইমেইল</label>
+                <label><i class="fas fa-envelope"></i> <span id="emailLabel2">ইমেইল</span></label>
                 <input type="email" id="regEmail" placeholder="email@example.com" autocomplete="email">
             </div>
             
             <div class="input-group">
-                <label><i class="fas fa-lock"></i> পাসওয়ার্ড</label>
+                <label><i class="fas fa-lock"></i> <span id="passwordLabel2">পাসওয়ার্ড</span></label>
                 <input type="password" id="regPass" placeholder="৬+ অক্ষর" autocomplete="new-password">
             </div>
             
             <input type="hidden" id="refCodeInput">
             
             <button class="btn-primary" onclick="register()" id="registerBtn">
-                <i class="fas fa-user-plus"></i> অ্যাকাউন্ট তৈরি
+                <i class="fas fa-user-plus"></i> <span id="registerBtnText">অ্যাকাউন্ট তৈরি</span>
             </button>
             
             <p style="text-align:center; font-size:0.85rem; margin-top:15px; color: var(--text-light);">
-                অ্যাকাউন্ট আছে? 
+                <span id="haveAccountText">অ্যাকাউন্ট আছে?</span> 
                 <a href="javascript:void(0)" onclick="toggleAuth('login')" style="color:var(--primary-2026); font-weight:700; text-decoration:none;">
-                    লগইন করুন
+                    <span id="loginLinkText">লগইন করুন</span>
                 </a>
             </p>
         </div>
@@ -921,113 +922,254 @@
     <!-- User Dashboard -->
     <div id="userDashboard" class="hidden">
         
-        <!-- User Profile Card -->
-        <div class="glass-card" style="padding: 15px; background: var(--primary-gradient); color: white; border: none;">
-            <div class="space-between" style="margin-bottom: 12px;">
-                <div>
-                    <h3 style="margin:0; font-size: 1.2rem;" id="userNameDisplay">User</h3>
-                    <small id="userTypeDisplay" style="opacity:0.9; font-size: 0.8rem;"></small>
+        <!-- Home Section -->
+        <div id="homeSection" class="dashboard-section active">
+            <!-- User Profile Card -->
+            <div class="glass-card" style="padding: 15px; background: var(--primary-gradient); color: white; border: none;">
+                <div class="space-between" style="margin-bottom: 12px;">
+                    <div>
+                        <h3 style="margin:0; font-size: 1.2rem;" id="userNameDisplay">User</h3>
+                        <small id="userTypeDisplay" style="opacity:0.9; font-size: 0.8rem;"></small>
+                    </div>
+                    <button onclick="logout()" style="background:rgba(255,255,255,0.2); border:none; color:white; padding:6px 12px; border-radius:10px; font-size:0.8rem; cursor:pointer; display:flex; align-items:center; gap:4px;">
+                        <i class="fas fa-sign-out-alt"></i> <span id="logoutText">Logout</span>
+                    </button>
                 </div>
-                <button onclick="logout()" style="background:rgba(255,255,255,0.2); border:none; color:white; padding:6px 12px; border-radius:10px; font-size:0.8rem; cursor:pointer; display:flex; align-items:center; gap:4px;">
-                    <i class="fas fa-sign-out-alt"></i> Logout
-                </button>
+                
+                <!-- Progress Bar -->
+                <div class="progress-container">
+                    <div class="progress-label">
+                        <span id="progressLabel">প্রোগ্রেস</span>
+                        <span id="progressText">0%</span>
+                    </div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="progressFill"></div>
+                    </div>
+                </div>
+                
+                <!-- Stats -->
+                <div class="stats-grid">
+                    <div class="stat-item">
+                        <i class="fas fa-tasks"></i>
+                        <span id="taskCountDisplay">0/0</span>
+                        <small id="tasksText">টাস্ক</small>
+                    </div>
+                    <div class="stat-item">
+                        <i class="fas fa-users"></i>
+                        <span id="inviteCountDisplay">0</span>
+                        <small id="invitesText">ইনভাইট</small>
+                    </div>
+                    <div class="stat-item">
+                        <i class="fas fa-coins"></i>
+                        <span id="pointsDisplay">0</span>
+                        <small id="pointsText">পয়েন্টস</small>
+                    </div>
+                    <div class="stat-item">
+                        <i class="fas fa-trophy"></i>
+                        <span id="rankDisplay">-</span>
+                        <small id="rankText">র‍্যাঙ্ক</small>
+                    </div>
+                </div>
             </div>
-            
-            <!-- Progress Bar -->
-            <div class="progress-container">
-                <div class="progress-label">
-                    <span>প্রোগ্রেস</span>
-                    <span id="progressText">0%</span>
-                </div>
-                <div class="progress-bar">
-                    <div class="progress-fill" id="progressFill"></div>
-                </div>
-            </div>
-            
-            <!-- Stats -->
-            <div class="stats-grid">
-                <div class="stat-item">
-                    <i class="fas fa-tasks"></i>
-                    <span id="taskCountDisplay">0/0</span>
-                    <small>টাস্ক</small>
-                </div>
-                <div class="stat-item">
-                    <i class="fas fa-users"></i>
-                    <span id="inviteCountDisplay">0</span>
-                    <small>ইনভাইট</small>
-                </div>
-                <div class="stat-item">
-                    <i class="fas fa-coins"></i>
-                    <span id="pointsDisplay">0</span>
-                    <small>পয়েন্টস</small>
-                </div>
-                <div class="stat-item">
-                    <i class="fas fa-trophy"></i>
-                    <span id="rankDisplay">-</span>
-                    <small>র‍্যাঙ্ক</small>
-                </div>
-            </div>
-        </div>
 
-        <!-- Referral Box -->
-        <div class="ref-box">
-            <h4><i class="fas fa-gift"></i> বন্ধুদের ইনভাইট করুন</h4>
-            <div class="ref-link" id="myRefLink">লিংক লোড হচ্ছে...</div>
-            <div style="display: flex; gap: 10px;">
-                <button onclick="copyLink()" style="flex:1; border:none; padding:10px; border-radius:10px; background:var(--primary-2026); color:white; font-weight:700; cursor:pointer; display:flex; align-items:center; justify-content:center; gap:6px; font-size:0.9rem;">
-                    <i class="fas fa-copy"></i> কপি
-                </button>
-                <button onclick="shareLink()" style="flex:1; border:none; padding:10px; border-radius:10px; background:rgba(255,255,255,0.2); color:white; font-weight:700; cursor:pointer; display:flex; align-items:center; justify-content:center; gap:6px; font-size:0.9rem;">
-                    <i class="fas fa-share-alt"></i> শেয়ার
-                </button>
+            <!-- Quick Stats -->
+            <div class="glass-card">
+                <h3 style="margin:0 0 12px 0; color: var(--text-dark); font-size: 1.1rem; display:flex; align-items:center; gap:8px;">
+                    <i class="fas fa-chart-line"></i> <span id="quickStatsTitle">কুইক স্ট্যাটস</span>
+                </h3>
+                <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px;">
+                    <div style="background: #f8f9fa; padding: 10px; border-radius: 10px; text-align: center;">
+                        <div style="font-size: 0.85rem; color: var(--text-light);" id="dailyTaskLabel">আজকের টাস্ক</div>
+                        <div style="font-weight: 800; color: var(--primary-2026); font-size: 1.2rem;">3/5</div>
+                    </div>
+                    <div style="background: #f8f9fa; padding: 10px; border-radius: 10px; text-align: center;">
+                        <div style="font-size: 0.85rem; color: var(--text-light);" id="streakLabel">স্ট্রিক</div>
+                        <div style="font-weight: 800; color: var(--primary-2026); font-size: 1.2rem;">7 🔥</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Quick Actions -->
+            <div class="glass-card">
+                <h3 style="margin:0 0 12px 0; color: var(--text-dark); font-size: 1.1rem; display:flex; align-items:center; gap:8px;">
+                    <i class="fas fa-bolt"></i> <span id="quickActionsTitle">কুইক একশন্স</span>
+                </h3>
+                <div style="display: flex; gap: 10px; margin-top: 10px;">
+                    <button onclick="switchSection('tasks')" style="flex:1; padding: 10px; border-radius: 10px; background: var(--primary-2026); color: white; border: none; font-weight: 700; font-size: 0.9rem; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 6px;">
+                        <i class="fas fa-tasks"></i> <span id="viewTasksBtn">টাস্ক দেখুন</span>
+                    </button>
+                    <button onclick="switchSection('referral')" style="flex:1; padding: 10px; border-radius: 10px; background: rgba(255, 26, 94, 0.1); color: var(--primary-2026); border: 2px solid var(--primary-2026); font-weight: 700; font-size: 0.9rem; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 6px;">
+                        <i class="fas fa-share-alt"></i> <span id="inviteBtn">ইনভাইট</span>
+                    </button>
+                </div>
             </div>
         </div>
 
         <!-- Tasks Section -->
-        <div style="margin: 20px 0 12px 0;" class="space-between">
-            <div style="font-weight:700; display:flex; align-items:center; gap:8px; color: var(--text-dark); font-size: 1.1rem;">
-                <i class="fas fa-tasks"></i> টাস্ক সমূহ
+        <div id="tasksSection" class="dashboard-section">
+            <div class="space-between" style="margin-bottom: 15px;">
+                <h2 style="color: var(--text-dark); font-size: 1.3rem; display:flex; align-items:center; gap:8px;">
+                    <i class="fas fa-tasks"></i> <span id="tasksTitle">টাস্ক সমূহ</span>
+                </h2>
+                <button onclick="refreshTasks()" style="background:none; border:none; color:var(--primary-2026); cursor:pointer; font-size:0.85rem; display:flex; align-items:center; gap:4px;">
+                    <i class="fas fa-redo"></i> <span id="refreshText">রিফ্রেশ</span>
+                </button>
             </div>
-            <button onclick="refreshTasks()" style="background:none; border:none; color:var(--primary-2026); cursor:pointer; font-size:0.85rem; display:flex; align-items:center; gap:4px;">
-                <i class="fas fa-redo"></i>
-            </button>
+            
+            <div id="taskList" class="task-list">
+                <!-- Tasks loaded here -->
+            </div>
+            
+            <div class="glass-card" style="margin-top: 15px; text-align: center;">
+                <i class="fas fa-info-circle" style="color: var(--primary-2026); font-size: 1.5rem; margin-bottom: 8px;"></i>
+                <h4 style="color: var(--text-dark); margin-bottom: 5px;" id="taskInfoTitle">টাস্ক তথ্য</h4>
+                <p style="color: var(--text-light); font-size: 0.85rem;" id="taskInfoText">
+                    প্রতিটি টাস্ক সম্পূর্ণ করে পয়েন্টস জিতুন। প্রতিদিন নতুন টাস্ক পাওয়া যাবে।
+                </p>
+            </div>
         </div>
-        
-        <div id="taskList" class="task-list">
-            <!-- Tasks loaded here -->
+
+        <!-- Referral Section -->
+        <div id="referralSection" class="dashboard-section">
+            <div class="ref-box">
+                <h4><i class="fas fa-gift"></i> <span id="referralTitle">বন্ধুদের ইনভাইট করুন</span></h4>
+                <div class="ref-link" id="myRefLink">লিংক লোড হচ্ছে...</div>
+                <div style="display: flex; gap: 10px;">
+                    <button onclick="copyLink()" style="flex:1; border:none; padding:10px; border-radius:10px; background:var(--primary-2026); color:white; font-weight:700; cursor:pointer; display:flex; align-items:center; justify-content:center; gap:6px; font-size:0.9rem;">
+                        <i class="fas fa-copy"></i> <span id="copyBtn">কপি</span>
+                    </button>
+                    <button onclick="shareLink()" style="flex:1; border:none; padding:10px; border-radius:10px; background:rgba(255,255,255,0.2); color:white; font-weight:700; cursor:pointer; display:flex; align-items:center; justify-content:center; gap:6px; font-size:0.9rem;">
+                        <i class="fas fa-share-alt"></i> <span id="shareBtn">শেয়ার</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Referral Stats -->
+            <div class="glass-card" style="margin-top: 15px;">
+                <h3 style="margin:0 0 12px 0; color: var(--text-dark); font-size: 1.1rem; display:flex; align-items:center; gap:8px;">
+                    <i class="fas fa-chart-bar"></i> <span id="referralStatsTitle">রেফারেল স্ট্যাটস</span>
+                </h3>
+                <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px;">
+                    <div style="background: #f8f9fa; padding: 10px; border-radius: 10px; text-align: center;">
+                        <div style="font-size: 0.85rem; color: var(--text-light);" id="totalReferralsLabel">মোট রেফারেল</div>
+                        <div style="font-weight: 800; color: var(--primary-2026); font-size: 1.2rem;" id="totalReferrals">0</div>
+                    </div>
+                    <div style="background: #f8f9fa; padding: 10px; border-radius: 10px; text-align: center;">
+                        <div style="font-size: 0.85rem; color: var(--text-light);" id="earnedPointsLabel">আর্জিত পয়েন্টস</div>
+                        <div style="font-weight: 800; color: var(--primary-2026); font-size: 1.2rem;" id="referralPoints">0</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- How it Works -->
+            <div class="glass-card" style="margin-top: 15px;">
+                <h3 style="margin:0 0 12px 0; color: var(--text-dark); font-size: 1.1rem; display:flex; align-items:center; gap:8px;">
+                    <i class="fas fa-question-circle"></i> <span id="howItWorksTitle">কিভাবে কাজ করে</span>
+                </h3>
+                <div style="color: var(--text-light); font-size: 0.85rem; line-height: 1.5;">
+                    <p id="referralStep1">1. আপনার রেফারেল লিংক শেয়ার করুন</p>
+                    <p id="referralStep2">2. বন্ধু রেজিস্ট্রেশন করলে ৫০ পয়েন্ট পাবেন</p>
+                    <p id="referralStep3">3. বন্ধু টাস্ক করলে আরও পয়েন্ট পাবেন</p>
+                </div>
+            </div>
         </div>
 
         <!-- Prizes Section -->
-        <div class="glass-card" style="margin-top: 15px;">
-            <h3 style="margin:0 0 15px 0; color: var(--text-dark); font-size: 1.1rem; display:flex; align-items:center; gap:8px;">
-                <i class="fas fa-award"></i> পুরস্কার
-            </h3>
+        <div id="prizesSection" class="dashboard-section">
+            <h2 style="margin-bottom: 15px; color: var(--text-dark); font-size: 1.3rem; display:flex; align-items:center; gap:8px;">
+                <i class="fas fa-award"></i> <span id="prizesTitle">পুরস্কার</span>
+            </h2>
             
             <div class="prizes-grid">
                 <div class="prize-item">
                     <div class="prize-icon">🥇</div>
-                    <div class="prize-title">১ম পুরস্কার</div>
+                    <div class="prize-title" id="firstPrize">১ম পুরস্কার</div>
                     <div class="prize-amount">৩০,০০০৳</div>
                 </div>
                 <div class="prize-item">
                     <div class="prize-icon">🥈</div>
-                    <div class="prize-title">২য় পুরস্কার</div>
+                    <div class="prize-title" id="secondPrize">২য় পুরস্কার</div>
                     <div class="prize-amount">২৫,০০০৳</div>
                 </div>
                 <div class="prize-item">
                     <div class="prize-icon">🥉</div>
-                    <div class="prize-title">৩য় পুরস্কার</div>
+                    <div class="prize-title" id="thirdPrize">৩য় পুরস্কার</div>
                     <div class="prize-amount">২০,০০০৳</div>
                 </div>
                 <div class="prize-item">
                     <div class="prize-icon">🎁</div>
-                    <div class="prize-title">স্পেশাল</div>
+                    <div class="prize-title" id="specialPrizes">স্পেশাল</div>
                     <div class="prize-amount">৭০+ গিফট</div>
                 </div>
             </div>
             
-            <div style="margin-top: 12px; padding-top: 12px; border-top: 1px solid rgba(255, 26, 94, 0.1); font-size: 0.8rem; color: var(--text-light); text-align: center;">
-                <i class="fas fa-info-circle"></i> আরও পুরস্কার আপনার জন্য অপেক্ষা করছে!
+            <div class="glass-card" style="margin-top: 15px;">
+                <h3 style="margin:0 0 12px 0; color: var(--text-dark); font-size: 1.1rem; display:flex; align-items:center; gap:8px;">
+                    <i class="fas fa-trophy"></i> <span id="winnerCriteriaTitle">জয়ের শর্ত</span>
+                </h3>
+                <div style="color: var(--text-light); font-size: 0.85rem; line-height: 1.5;">
+                    <p id="criteria1">• সর্বোচ্চ পয়েন্টস অর্জন করুন</p>
+                    <p id="criteria2">• বেশি বন্ধুদের ইনভাইট করুন</p>
+                    <p id="criteria3">• নিয়মিত টাস্ক সম্পন্ন করুন</p>
+                    <p id="criteria4">• প্রতিদিন অ্যাপ ব্যবহার করুন</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Profile Section -->
+        <div id="profileSection" class="dashboard-section">
+            <div class="glass-card" style="text-align: center;">
+                <div style="width: 80px; height: 80px; background: var(--primary-gradient); border-radius: 50%; margin: 0 auto 15px; display: flex; align-items: center; justify-content: center; font-size: 2rem; color: white;">
+                    <i class="fas fa-user"></i>
+                </div>
+                <h3 style="color: var(--text-dark); margin-bottom: 5px;" id="profileTitle">প্রোফাইল</h3>
+                <p style="color: var(--text-light); font-size: 0.9rem;" id="memberSince">সদস্য: আজ</p>
+            </div>
+
+            <!-- Profile Info -->
+            <div class="glass-card" style="margin-top: 15px;">
+                <h3 style="margin:0 0 12px 0; color: var(--text-dark); font-size: 1.1rem; display:flex; align-items:center; gap:8px;">
+                    <i class="fas fa-info-circle"></i> <span id="profileInfoTitle">ব্যক্তিগত তথ্য</span>
+                </h3>
+                <div style="color: var(--text-light); font-size: 0.9rem;">
+                    <div style="display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid rgba(0,0,0,0.1);">
+                        <span id="nameLabel">নাম:</span>
+                        <span id="profileName">-</span>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid rgba(0,0,0,0.1);">
+                        <span id="emailLabel3">ইমেইল:</span>
+                        <span id="profileEmail">-</span>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid rgba(0,0,0,0.1);">
+                        <span id="accountTypeLabel2">অ্যাকাউন্ট টাইপ:</span>
+                        <span id="profileType">-</span>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; padding: 8px 0;">
+                        <span id="languageLabel">ভাষা:</span>
+                        <span id="profileLanguage">বাংলা</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Settings -->
+            <div class="glass-card" style="margin-top: 15px;">
+                <h3 style="margin:0 0 12px 0; color: var(--text-dark); font-size: 1.1rem; display:flex; align-items:center; gap:8px;">
+                    <i class="fas fa-cog"></i> <span id="settingsTitle">সেটিংস</span>
+                </h3>
+                <div style="color: var(--text-light); font-size: 0.9rem;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; padding: 10px 0; border-bottom: 1px solid rgba(0,0,0,0.1); cursor: pointer;" onclick="toggleLanguage()">
+                        <span><i class="fas fa-language"></i> <span id="changeLanguageText">ভাষা পরিবর্তন</span></span>
+                        <i class="fas fa-chevron-right"></i>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; align-items: center; padding: 10px 0; border-bottom: 1px solid rgba(0,0,0,0.1); cursor: pointer;" onclick="showToast('শীঘ্রই আসছে!', 'info')">
+                        <span><i class="fas fa-bell"></i> <span id="notificationsText">নোটিফিকেশন</span></span>
+                        <i class="fas fa-chevron-right"></i>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; align-items: center; padding: 10px 0; cursor: pointer;" onclick="showToast('শীঘ্রই আসছে!', 'info')">
+                        <span><i class="fas fa-shield-alt"></i> <span id="privacyText">গোপনীয়তা</span></span>
+                        <i class="fas fa-chevron-right"></i>
+                    </div>
+                </div>
             </div>
         </div>
 
@@ -1035,7 +1177,7 @@
         <div class="footer">
             <p>Valentine's Day 2026 Contest</p>
             <p style="font-size: 0.7rem; margin-top: 4px;">
-                <i class="fas fa-heart" style="color: var(--primary-2026);"></i> সকলের জন্য ভালোবাসা
+                <i class="fas fa-heart" style="color: var(--primary-2026);"></i> <span id="footerLove">সকলের জন্য ভালোবাসা</span>
             </p>
         </div>
     </div>
@@ -1044,26 +1186,26 @@
 
 <!-- Mobile Navigation -->
 <div class="mobile-nav hidden" id="mobileNav">
-    <a href="#dashboard" class="nav-item active" onclick="switchTab('dashboard')">
+    <div class="nav-item active" onclick="switchSection('home')">
         <i class="fas fa-home"></i>
-        <span>হোম</span>
-    </a>
-    <a href="#tasks" class="nav-item" onclick="switchTab('tasks')">
+        <span id="navHome">হোম</span>
+    </div>
+    <div class="nav-item" onclick="switchSection('tasks')">
         <i class="fas fa-tasks"></i>
-        <span>টাস্ক</span>
-    </a>
-    <a href="#referral" class="nav-item" onclick="switchTab('referral')">
+        <span id="navTasks">টাস্ক</span>
+    </div>
+    <div class="nav-item" onclick="switchSection('referral')">
         <i class="fas fa-users"></i>
-        <span>রেফার</span>
-    </a>
-    <a href="#prizes" class="nav-item" onclick="switchTab('prizes')">
+        <span id="navReferral">রেফার</span>
+    </div>
+    <div class="nav-item" onclick="switchSection('prizes')">
         <i class="fas fa-gift"></i>
-        <span>পুরস্কার</span>
-    </a>
-    <a href="#profile" class="nav-item" onclick="switchTab('profile')">
+        <span id="navPrizes">পুরস্কার</span>
+    </div>
+    <div class="nav-item" onclick="switchSection('profile')">
         <i class="fas fa-user"></i>
-        <span>প্রোফাইল</span>
-    </a>
+        <span id="navProfile">প্রোফাইল</span>
+    </div>
 </div>
 
 <!-- Firebase SDK -->
@@ -1072,7 +1214,7 @@
 <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
 
 <script>
-    // ==================== FIREBASE CONFIG ====================
+    // ==================== GLOBAL VARIABLES ====================
     const firebaseConfig = {
         apiKey: "AIzaSyAxvrjzR-79a4SlbS_Kq6ugnrikN4M_Xuw",
         authDomain: "adclickearn-898a8.firebaseapp.com",
@@ -1084,7 +1226,6 @@
         measurementId: "G-LZDJ2G5Q8V"
     };
 
-    // Initialize Firebase
     if (!firebase.apps.length) {
         firebase.initializeApp(firebaseConfig);
     }
@@ -1092,17 +1233,228 @@
     const auth = firebase.auth();
     const db = firebase.database();
     
-    // Global Variables
     let currentUser = null;
     let totalTasks = 0;
     let currentTasks = {};
+    let currentLanguage = 'bn'; // Default language: Bengali
+    let selectedLangOnRegister = 'bn'; // Language selected during registration
+
+    // ==================== LANGUAGE TRANSLATIONS ====================
+    const translations = {
+        bn: {
+            // App
+            appTitle: "Happy Valentine's",
+            appSubtitle: "টাস্ক করুন, জিতুন পুরস্কার!",
+            loaderText: "২০২৬ Valentine's Day...",
+            
+            // Auth
+            loginTitle: "লগইন",
+            emailLabel: "ইমেইল",
+            passwordLabel: "পাসওয়ার্ড",
+            loginBtnText: "লগইন",
+            noAccountText: "অ্যাকাউন্ট নেই?",
+            registerLinkText: "রেজিস্ট্রেশন",
+            
+            registerTitle: "রেজিস্ট্রেশন",
+            preferredLangLabel: "পছন্দের ভাষা",
+            accountTypeLabel: "অ্যাকাউন্ট টাইপ",
+            singleOption: "সিঙ্গেল",
+            coupleOption: "কাপল",
+            yourNameLabel: "আপনার নাম",
+            partnerNameLabel: "সঙ্গীর নাম",
+            emailLabel2: "ইমেইল",
+            passwordLabel2: "পাসওয়ার্ড",
+            registerBtnText: "অ্যাকাউন্ট তৈরি",
+            haveAccountText: "অ্যাকাউন্ট আছে?",
+            loginLinkText: "লগইন করুন",
+            
+            // Dashboard
+            logoutText: "লগআউট",
+            progressLabel: "প্রোগ্রেস",
+            tasksText: "টাস্ক",
+            invitesText: "ইনভাইট",
+            pointsText: "পয়েন্টস",
+            rankText: "র‍্যাঙ্ক",
+            
+            // Home Section
+            quickStatsTitle: "কুইক স্ট্যাটস",
+            dailyTaskLabel: "আজকের টাস্ক",
+            streakLabel: "স্ট্রিক",
+            quickActionsTitle: "কুইক একশন্স",
+            viewTasksBtn: "টাস্ক দেখুন",
+            inviteBtn: "ইনভাইট",
+            
+            // Tasks Section
+            tasksTitle: "টাস্ক সমূহ",
+            refreshText: "রিফ্রেশ",
+            taskInfoTitle: "টাস্ক তথ্য",
+            taskInfoText: "প্রতিটি টাস্ক সম্পূর্ণ করে পয়েন্টস জিতুন। প্রতিদিন নতুন টাস্ক পাওয়া যাবে।",
+            
+            // Referral Section
+            referralTitle: "বন্ধুদের ইনভাইট করুন",
+            copyBtn: "কপি",
+            shareBtn: "শেয়ার",
+            referralStatsTitle: "রেফারেল স্ট্যাটস",
+            totalReferralsLabel: "মোট রেফারেল",
+            earnedPointsLabel: "আর্জিত পয়েন্টস",
+            howItWorksTitle: "কিভাবে কাজ করে",
+            referralStep1: "1. আপনার রেফারেল লিংক শেয়ার করুন",
+            referralStep2: "2. বন্ধু রেজিস্ট্রেশন করলে ৫০ পয়েন্ট পাবেন",
+            referralStep3: "3. বন্ধু টাস্ক করলে আরও পয়েন্ট পাবেন",
+            
+            // Prizes Section
+            prizesTitle: "পুরস্কার",
+            firstPrize: "১ম পুরস্কার",
+            secondPrize: "২য় পুরস্কার",
+            thirdPrize: "৩য় পুরস্কার",
+            specialPrizes: "স্পেশাল",
+            winnerCriteriaTitle: "জয়ের শর্ত",
+            criteria1: "• সর্বোচ্চ পয়েন্টস অর্জন করুন",
+            criteria2: "• বেশি বন্ধুদের ইনভাইট করুন",
+            criteria3: "• নিয়মিত টাস্ক সম্পন্ন করুন",
+            criteria4: "• প্রতিদিন অ্যাপ ব্যবহার করুন",
+            
+            // Profile Section
+            profileTitle: "প্রোফাইল",
+            memberSince: "সদস্য: আজ",
+            profileInfoTitle: "ব্যক্তিগত তথ্য",
+            nameLabel: "নাম:",
+            emailLabel3: "ইমেইল:",
+            accountTypeLabel2: "অ্যাকাউন্ট টাইপ:",
+            languageLabel: "ভাষা:",
+            settingsTitle: "সেটিংস",
+            changeLanguageText: "ভাষা পরিবর্তন",
+            notificationsText: "নোটিফিকেশন",
+            privacyText: "গোপনীয়তা",
+            
+            // Navigation
+            navHome: "হোম",
+            navTasks: "টাস্ক",
+            navReferral: "রেফার",
+            navPrizes: "পুরস্কার",
+            navProfile: "প্রোফাইল",
+            
+            // Footer
+            footerLove: "সকলের জন্য ভালোবাসা",
+            
+            // Messages
+            offlineText: "আপনি অফলাইনে আছেন",
+            currentLang: "বাংলা"
+        },
+        
+        en: {
+            // App
+            appTitle: "Happy Valentine's",
+            appSubtitle: "Complete Tasks, Win Prizes!",
+            loaderText: "Valentine's Day 2026...",
+            
+            // Auth
+            loginTitle: "Login",
+            emailLabel: "Email",
+            passwordLabel: "Password",
+            loginBtnText: "Sign In",
+            noAccountText: "No account?",
+            registerLinkText: "Register",
+            
+            registerTitle: "Registration",
+            preferredLangLabel: "Preferred Language",
+            accountTypeLabel: "Account Type",
+            singleOption: "Single",
+            coupleOption: "Couple",
+            yourNameLabel: "Your Name",
+            partnerNameLabel: "Partner Name",
+            emailLabel2: "Email",
+            passwordLabel2: "Password",
+            registerBtnText: "Create Account",
+            haveAccountText: "Have an account?",
+            loginLinkText: "Login",
+            
+            // Dashboard
+            logoutText: "Logout",
+            progressLabel: "Progress",
+            tasksText: "Tasks",
+            invitesText: "Invites",
+            pointsText: "Points",
+            rankText: "Rank",
+            
+            // Home Section
+            quickStatsTitle: "Quick Stats",
+            dailyTaskLabel: "Today's Tasks",
+            streakLabel: "Streak",
+            quickActionsTitle: "Quick Actions",
+            viewTasksBtn: "View Tasks",
+            inviteBtn: "Invite",
+            
+            // Tasks Section
+            tasksTitle: "Tasks",
+            refreshText: "Refresh",
+            taskInfoTitle: "Task Information",
+            taskInfoText: "Complete each task to earn points. New tasks available daily.",
+            
+            // Referral Section
+            referralTitle: "Invite Friends",
+            copyBtn: "Copy",
+            shareBtn: "Share",
+            referralStatsTitle: "Referral Stats",
+            totalReferralsLabel: "Total Referrals",
+            earnedPointsLabel: "Points Earned",
+            howItWorksTitle: "How It Works",
+            referralStep1: "1. Share your referral link",
+            referralStep2: "2. Earn 50 points when friend registers",
+            referralStep3: "3. Earn more when they complete tasks",
+            
+            // Prizes Section
+            prizesTitle: "Prizes",
+            firstPrize: "1st Prize",
+            secondPrize: "2nd Prize",
+            thirdPrize: "3rd Prize",
+            specialPrizes: "Special",
+            winnerCriteriaTitle: "Winner Criteria",
+            criteria1: "• Earn maximum points",
+            criteria2: "• Invite more friends",
+            criteria3: "• Complete tasks regularly",
+            criteria4: "• Use app daily",
+            
+            // Profile Section
+            profileTitle: "Profile",
+            memberSince: "Member Since: Today",
+            profileInfoTitle: "Personal Information",
+            nameLabel: "Name:",
+            emailLabel3: "Email:",
+            accountTypeLabel2: "Account Type:",
+            languageLabel: "Language:",
+            settingsTitle: "Settings",
+            changeLanguageText: "Change Language",
+            notificationsText: "Notifications",
+            privacyText: "Privacy",
+            
+            // Navigation
+            navHome: "Home",
+            navTasks: "Tasks",
+            navReferral: "Referral",
+            navPrizes: "Prizes",
+            navProfile: "Profile",
+            
+            // Footer
+            footerLove: "Love for Everyone",
+            
+            // Messages
+            offlineText: "You are offline",
+            currentLang: "English"
+        }
+    };
 
     // ==================== INITIALIZATION ====================
     document.addEventListener('DOMContentLoaded', function() {
-        // Mobile optimization
-        document.body.style.overflowX = 'hidden';
+        // Load saved language preference
+        const savedLang = localStorage.getItem('valentine_lang') || 'bn';
+        currentLanguage = savedLang;
+        updateLanguageDisplay();
         
-        // Check for referral
+        // Apply language on page load
+        applyLanguage();
+        
+        // Check for referral code
         const urlParams = new URLSearchParams(window.location.search);
         const refCode = urlParams.get('ref');
         if (refCode) {
@@ -1126,6 +1478,8 @@
                 showDashboard();
                 updateUserOnlineStatus(true);
                 document.getElementById('mobileNav').classList.remove('hidden');
+                loadUserData();
+                switchSection('home');
             } else {
                 showAuth();
                 updateUserOnlineStatus(false);
@@ -1134,30 +1488,107 @@
         });
     });
 
-    // ==================== MOBILE OPTIMIZATIONS ====================
-    function preventPullToRefresh() {
-        let touchStartY = 0;
+    // ==================== LANGUAGE FUNCTIONS ====================
+    function selectLanguage(lang) {
+        selectedLangOnRegister = lang;
         
-        document.addEventListener('touchstart', e => {
-            touchStartY = e.touches[0].clientY;
-        }, { passive: true });
-        
-        document.addEventListener('touchmove', e => {
-            if (window.scrollY === 0 && e.touches[0].clientY > touchStartY + 10) {
-                e.preventDefault();
-            }
-        }, { passive: false });
+        // Update UI for registration form
+        document.querySelectorAll('.lang-option').forEach(option => {
+            option.classList.remove('selected');
+        });
+        event.target.closest('.lang-option').classList.add('selected');
     }
 
-    function switchTab(tabName) {
+    function toggleLanguage() {
+        // Toggle between Bengali and English
+        currentLanguage = currentLanguage === 'bn' ? 'en' : 'bn';
+        localStorage.setItem('valentine_lang', currentLanguage);
+        
+        // Apply new language
+        applyLanguage();
+        
+        // Update user preference in database if logged in
+        if (currentUser) {
+            db.ref('users/' + currentUser.uid + '/language').set(currentLanguage);
+        }
+        
+        showToast(currentLanguage === 'bn' ? 'ভাষা বাংলা তে পরিবর্তন করা হয়েছে' : 'Language changed to English', 'success');
+    }
+
+    function applyLanguage() {
+        const lang = currentLanguage;
+        const t = translations[lang];
+        
+        // Update all translatable elements
+        Object.keys(t).forEach(key => {
+            const element = document.getElementById(key);
+            if (element) {
+                if (element.tagName === 'INPUT' || element.tagName === 'TEXTAREA') {
+                    element.placeholder = t[key];
+                } else {
+                    element.textContent = t[key];
+                }
+            }
+        });
+        
+        // Update language switcher button
+        document.getElementById('currentLang').textContent = t.currentLang;
+        
+        // Update registration language selection
+        document.querySelectorAll('.lang-option').forEach(option => {
+            if (option.textContent.includes('বাংলা')) {
+                option.classList.toggle('selected', lang === 'bn');
+            } else if (option.textContent.includes('English')) {
+                option.classList.toggle('selected', lang === 'en');
+            }
+        });
+        
+        // Update user profile language if available
+        if (currentUser) {
+            document.getElementById('profileLanguage').textContent = 
+                lang === 'bn' ? 'বাংলা' : 'English';
+        }
+    }
+
+    function updateLanguageDisplay() {
+        document.getElementById('currentLang').textContent = 
+            currentLanguage === 'bn' ? 'বাংলা' : 'English';
+    }
+
+    // ==================== SECTION NAVIGATION ====================
+    function switchSection(sectionId) {
+        // Hide all sections
+        document.querySelectorAll('.dashboard-section').forEach(section => {
+            section.classList.remove('active');
+        });
+        
+        // Show selected section
+        document.getElementById(sectionId + 'Section').classList.add('active');
+        
         // Update active nav item
         document.querySelectorAll('.nav-item').forEach(item => {
             item.classList.remove('active');
         });
-        event.target.closest('.nav-item').classList.add('active');
         
-        // Show corresponding content
-        showToast(`${tabName} ট্যাব লোড হচ্ছে...`, 'info');
+        // Find and activate corresponding nav item
+        const navItems = document.querySelectorAll('.nav-item');
+        const sectionIndex = ['home', 'tasks', 'referral', 'prizes', 'profile'].indexOf(sectionId);
+        if (navItems[sectionIndex]) {
+            navItems[sectionIndex].classList.add('active');
+        }
+        
+        // Load section-specific data
+        switch(sectionId) {
+            case 'tasks':
+                loadTasks();
+                break;
+            case 'referral':
+                updateReferralStats();
+                break;
+            case 'profile':
+                loadProfileData();
+                break;
+        }
     }
 
     // ==================== AUTH FUNCTIONS ====================
@@ -1205,16 +1636,6 @@
         });
     }
 
-    function showError(elementId, message) {
-        const element = document.getElementById(elementId);
-        element.innerHTML = `
-            <div class="message error">
-                <i class="fas fa-exclamation-circle"></i>
-                <span>${message}</span>
-            </div>
-        `;
-    }
-
     function setLoading(loading) {
         document.getElementById('loader').style.display = loading ? 'flex' : 'none';
         document.querySelectorAll('.btn-primary').forEach(btn => {
@@ -1222,7 +1643,6 @@
         });
     }
 
-    // Registration function
     async function register() {
         const email = document.getElementById('regEmail').value.trim();
         const password = document.getElementById('regPass').value;
@@ -1235,25 +1655,29 @@
         
         // Validation
         if (!validateName(name)) {
-            showError('registerMessage', 'নাম কমপক্ষে ২ অক্ষরের হতে হবে');
+            showError('registerMessage', currentLanguage === 'bn' ? 
+                'নাম কমপক্ষে ২ অক্ষরের হতে হবে' : 'Name must be at least 2 characters');
             document.getElementById('regName').classList.add('error');
             return;
         }
         
         if (type === 'couple' && !validateName(partner)) {
-            showError('registerMessage', 'পার্টনারের নাম দিন');
+            showError('registerMessage', currentLanguage === 'bn' ? 
+                'পার্টনারের নাম দিন' : 'Enter partner name');
             document.getElementById('partnerName').classList.add('error');
             return;
         }
         
         if (!validateEmail(email)) {
-            showError('registerMessage', 'সঠিক ইমেইল দিন');
+            showError('registerMessage', currentLanguage === 'bn' ? 
+                'সঠিক ইমেইল দিন' : 'Enter valid email');
             document.getElementById('regEmail').classList.add('error');
             return;
         }
         
         if (!validatePassword(password)) {
-            showError('registerMessage', 'পাসওয়ার্ড কমপক্ষে ৬ অক্ষরের');
+            showError('registerMessage', currentLanguage === 'bn' ? 
+                'পাসওয়ার্ড কমপক্ষে ৬ অক্ষরের' : 'Password must be at least 6 characters');
             document.getElementById('regPass').classList.add('error');
             return;
         }
@@ -1265,7 +1689,8 @@
             if (referrer && referrer !== 'none') {
                 const refSnapshot = await db.ref('users/' + referrer).once('value');
                 if (!refSnapshot.exists()) {
-                    showError('registerMessage', 'ভুল রেফারেল কোড');
+                    showError('registerMessage', currentLanguage === 'bn' ? 
+                        'ভুল রেফারেল কোড' : 'Invalid referral code');
                     setLoading(false);
                     return;
                 }
@@ -1288,7 +1713,9 @@
                 createdAt: Date.now(),
                 lastLogin: Date.now(),
                 isOnline: true,
-                year: 2026
+                year: 2026,
+                language: selectedLangOnRegister,
+                preferredLanguage: selectedLangOnRegister
             };
             
             await db.ref('users/' + cred.user.uid).set(userData);
@@ -1299,22 +1726,30 @@
                 await db.ref('users/' + referrer + '/points').transaction(cur => (cur || 0) + 50);
             }
             
-            showToast('রেজিস্ট্রেশন সফল! স্বাগতম!', 'success');
+            // Set user's language preference
+            currentLanguage = selectedLangOnRegister;
+            localStorage.setItem('valentine_lang', currentLanguage);
+            applyLanguage();
+            
+            showToast(currentLanguage === 'bn' ? 'রেজিস্ট্রেশন সফল!' : 'Registration successful!', 'success');
             setLoading(false);
             
         } catch (err) {
             setLoading(false);
-            let errorMessage = 'রেজিস্ট্রেশন ব্যর্থ';
+            let errorMessage = currentLanguage === 'bn' ? 'রেজিস্ট্রেশন ব্যর্থ' : 'Registration failed';
             
             switch (err.code) {
                 case 'auth/email-already-in-use':
-                    errorMessage = 'ইমেইলটি ইতিমধ্যে ব্যবহার করা হয়েছে';
+                    errorMessage = currentLanguage === 'bn' ? 
+                        'ইমেইলটি ইতিমধ্যে ব্যবহার করা হয়েছে' : 'Email already in use';
                     break;
                 case 'auth/weak-password':
-                    errorMessage = 'পাসওয়ার্ড শক্তিশালী করুন';
+                    errorMessage = currentLanguage === 'bn' ? 
+                        'পাসওয়ার্ড শক্তিশালী করুন' : 'Use stronger password';
                     break;
                 case 'auth/invalid-email':
-                    errorMessage = 'সঠিক ইমেইল দিন';
+                    errorMessage = currentLanguage === 'bn' ? 
+                        'সঠিক ইমেইল দিন' : 'Enter valid email';
                     break;
                 default:
                     errorMessage = err.message;
@@ -1324,7 +1759,6 @@
         }
     }
 
-    // Login function
     async function login() {
         const email = document.getElementById('loginEmail').value.trim();
         const password = document.getElementById('loginPass').value;
@@ -1332,13 +1766,15 @@
         clearMessages();
         
         if (!validateEmail(email)) {
-            showError('loginMessage', 'সঠিক ইমেইল দিন');
+            showError('loginMessage', currentLanguage === 'bn' ? 
+                'সঠিক ইমেইল দিন' : 'Enter valid email');
             document.getElementById('loginEmail').classList.add('error');
             return;
         }
         
         if (!validatePassword(password)) {
-            showError('loginMessage', 'পাসওয়ার্ড দিন');
+            showError('loginMessage', currentLanguage === 'bn' ? 
+                'পাসওয়ার্ড দিন' : 'Enter password');
             document.getElementById('loginPass').classList.add('error');
             return;
         }
@@ -1347,21 +1783,24 @@
         
         try {
             await auth.signInWithEmailAndPassword(email, password);
-            showToast('লগইন সফল!', 'success');
+            showToast(currentLanguage === 'bn' ? 'লগইন সফল!' : 'Login successful!', 'success');
             setLoading(false);
         } catch (err) {
             setLoading(false);
-            let errorMessage = 'লগইন ব্যর্থ';
+            let errorMessage = currentLanguage === 'bn' ? 'লগইন ব্যর্থ' : 'Login failed';
             
             switch (err.code) {
                 case 'auth/user-not-found':
-                    errorMessage = 'ইমেইল খুঁজে পাওয়া যায়নি';
+                    errorMessage = currentLanguage === 'bn' ? 
+                        'ইমেইল খুঁজে পাওয়া যায়নি' : 'Email not found';
                     break;
                 case 'auth/wrong-password':
-                    errorMessage = 'ভুল পাসওয়ার্ড';
+                    errorMessage = currentLanguage === 'bn' ? 
+                        'ভুল পাসওয়ার্ড' : 'Wrong password';
                     break;
                 case 'auth/user-disabled':
-                    errorMessage = 'অ্যাকাউন্ট নিষ্ক্রিয়';
+                    errorMessage = currentLanguage === 'bn' ? 
+                        'অ্যাকাউন্ট নিষ্ক্রিয়' : 'Account disabled';
                     break;
                 default:
                     errorMessage = err.message;
@@ -1376,7 +1815,7 @@
             updateUserOnlineStatus(false);
         }
         auth.signOut();
-        showToast('লগআউট সফল', 'success');
+        showToast(currentLanguage === 'bn' ? 'লগআউট সফল' : 'Logout successful', 'success');
     }
 
     function updateUserOnlineStatus(isOnline) {
@@ -1398,9 +1837,6 @@
         document.getElementById('userDashboard').classList.remove('hidden');
         document.getElementById('mobileNav').classList.remove('hidden');
         
-        loadUserData();
-        loadTasks();
-        
         const refLink = window.location.origin + window.location.pathname + "?ref=" + currentUser.uid;
         document.getElementById('myRefLink').innerText = refLink;
         
@@ -1413,9 +1849,16 @@
             const data = snapshot.val();
             if (data) {
                 updateUserDisplay(data);
+                
+                // Load user's language preference
+                if (data.language) {
+                    currentLanguage = data.language;
+                    localStorage.setItem('valentine_lang', currentLanguage);
+                    applyLanguage();
+                }
             }
         } catch (err) {
-            showToast('ডাটা লোড করতে সমস্যা', 'error');
+            showToast(currentLanguage === 'bn' ? 'ডাটা লোড করতে সমস্যা' : 'Failed to load data', 'error');
         }
     }
 
@@ -1428,33 +1871,34 @@
 
     function updateUserDisplay(data) {
         // User info
-        document.getElementById('userNameDisplay').innerText = 
+        document.getElementById('userNameDisplay').textContent = 
             data.name + (data.partnerName ? ' & ' + data.partnerName : '');
         
-        document.getElementById('userTypeDisplay').innerText = 
-            data.type === 'couple' ? 'কাপল' : 'সিঙ্গেল';
+        document.getElementById('userTypeDisplay').textContent = 
+            data.type === 'couple' ? (currentLanguage === 'bn' ? 'কাপল' : 'Couple') : 
+            (currentLanguage === 'bn' ? 'সিঙ্গেল' : 'Single');
         
         // Progress
         const completedTasks = data.tasksCompleted || 0;
         const progress = totalTasks > 0 ? Math.round((completedTasks / totalTasks) * 100) : 0;
         
-        document.getElementById('taskCountDisplay').innerText = `${completedTasks}/${totalTasks}`;
-        document.getElementById('progressText').innerText = `${progress}%`;
+        document.getElementById('taskCountDisplay').textContent = `${completedTasks}/${totalTasks}`;
+        document.getElementById('progressText').textContent = `${progress}%`;
         document.getElementById('progressFill').style.width = `${progress}%`;
         
         // Stats
-        document.getElementById('inviteCountDisplay').innerText = data.invites || 0;
-        document.getElementById('pointsDisplay').innerText = data.points || 0;
+        document.getElementById('inviteCountDisplay').textContent = data.invites || 0;
+        document.getElementById('pointsDisplay').textContent = data.points || 0;
         
         // Rank
         const invites = data.invites || 0;
-        let rank = 'নতুন';
-        if (invites >= 30) rank = '🥇 গোল্ড';
-        else if (invites >= 20) rank = '🥈 সিলভার';
-        else if (invites >= 10) rank = '🥉 ব্রোঞ্জ';
-        else if (invites >= 5) rank = '⭐ স্টার';
+        let rank = currentLanguage === 'bn' ? 'নতুন' : 'New';
+        if (invites >= 30) rank = currentLanguage === 'bn' ? '🥇 গোল্ড' : '🥇 Gold';
+        else if (invites >= 20) rank = currentLanguage === 'bn' ? '🥈 সিলভার' : '🥈 Silver';
+        else if (invites >= 10) rank = currentLanguage === 'bn' ? '🥉 ব্রোঞ্জ' : '🥉 Bronze';
+        else if (invites >= 5) rank = currentLanguage === 'bn' ? '⭐ স্টার' : '⭐ Star';
         
-        document.getElementById('rankDisplay').innerText = rank;
+        document.getElementById('rankDisplay').textContent = rank;
     }
 
     async function loadTasks() {
@@ -1467,8 +1911,12 @@
                 list.innerHTML = `
                     <div class="glass-card text-center" style="padding: 25px;">
                         <i class="fas fa-tasks" style="font-size: 2.5rem; color: #ffccdc; margin-bottom: 12px;"></i>
-                        <h3 style="color: var(--text-dark); margin-bottom: 8px;">কোন টাস্ক নেই</h3>
-                        <p style="color: var(--text-light); font-size: 0.9rem;">টাস্ক শীঘ্রই যোগ করা হবে</p>
+                        <h3 style="color: var(--text-dark); margin-bottom: 8px;">${
+                            currentLanguage === 'bn' ? 'কোন টাস্ক নেই' : 'No Tasks'
+                        }</h3>
+                        <p style="color: var(--text-light); font-size: 0.9rem;">${
+                            currentLanguage === 'bn' ? 'টাস্ক শীঘ্রই যোগ করা হবে' : 'Tasks coming soon'
+                        }</p>
                     </div>
                 `;
                 totalTasks = 0;
@@ -1483,7 +1931,7 @@
             renderTasks(tasks, completedTasks);
             
         } catch (err) {
-            showToast('টাস্ক লোড করতে সমস্যা', 'error');
+            showToast(currentLanguage === 'bn' ? 'টাস্ক লোড করতে সমস্যা' : 'Failed to load tasks', 'error');
         }
     }
 
@@ -1495,6 +1943,11 @@
             const task = tasks[id];
             const isDone = completedTasks.hasOwnProperty(id);
             const taskNumber = index + 1;
+            
+            const startText = currentLanguage === 'bn' ? 'শুরু' : 'Start';
+            const completeText = currentLanguage === 'bn' ? 'সম্পূর্ণ' : 'Complete';
+            const secondsText = currentLanguage === 'bn' ? 'সেকেন্ড' : 'seconds';
+            const pointsText = currentLanguage === 'bn' ? 'পয়েন্টস' : 'points';
             
             list.innerHTML += `
                 <div class="task-card ${isDone ? 'task-completed' : ''}" id="task-${id}">
@@ -1508,18 +1961,18 @@
                             </div>
                             <div style="display: flex; align-items: center; gap: 8px; font-size: 0.8rem; flex-wrap: wrap;">
                                 <span style="color: var(--text-light);">
-                                    <i class="fas fa-clock"></i> ${task.duration || 15}s
+                                    <i class="fas fa-clock"></i> ${task.duration || 15}${secondsText}
                                 </span>
                                 <span style="background: #ffe6f0; color: var(--primary-2026); padding: 2px 6px; border-radius: 8px; font-weight: 600;">
-                                    <i class="fas fa-coins"></i> +${task.points || 10}
+                                    <i class="fas fa-coins"></i> +${task.points || 10} ${pointsText}
                                 </span>
                             </div>
                         </div>
                     </div>
                     ${isDone ? 
-                        '<button class="btn-task done"><i class="fas fa-check"></i> সম্পূর্ণ</button>' : 
+                        `<button class="btn-task done"><i class="fas fa-check"></i> ${completeText}</button>` : 
                         `<button class="btn-task active" onclick="startTask('${id}', '${task.url}')" id="btn-${id}">
-                            <i class="fas fa-play"></i> শুরু
+                            <i class="fas fa-play"></i> ${startText}
                         </button>`
                     }
                 </div>
@@ -1544,7 +1997,6 @@
         if (!task) return;
         
         const btn = document.getElementById(`btn-${taskId}`);
-        const originalText = btn.innerHTML;
         const duration = task.duration || 15;
         
         // Open in new tab
@@ -1562,18 +2014,22 @@
             
             if (secondsLeft <= 0) {
                 clearInterval(timer);
-                btn.innerHTML = '<i class="fas fa-check"></i> ক্লেইম';
+                const claimText = currentLanguage === 'bn' ? 'ক্লেইম' : 'Claim';
+                btn.innerHTML = `<i class="fas fa-check"></i> ${claimText}`;
                 btn.disabled = false;
                 btn.classList.add('active');
                 btn.onclick = function() {
                     claimTask(taskId);
                 };
-                showToast('টাস্ক সম্পন্ন! ক্লেইম করুন', 'success');
+                showToast(currentLanguage === 'bn' ? 'টাস্ক সম্পন্ন! ক্লেইম করুন' : 'Task complete! Claim now', 'success');
             }
         }, 1000);
         
         btn.dataset.timer = timer;
-        showToast(`টাস্ক শুরু! ${duration} সেকেন্ড অপেক্ষা করুন`, 'info');
+        const startMsg = currentLanguage === 'bn' ? 
+            `টাস্ক শুরু! ${duration} সেকেন্ড অপেক্ষা করুন` : 
+            `Task started! Wait ${duration} seconds`;
+        showToast(startMsg, 'info');
     }
 
     async function claimTask(taskId) {
@@ -1591,10 +2047,14 @@
             await db.ref().update(updates);
             
             setLoading(false);
-            showToast(`${task.points || 10} পয়েন্টস পাওয়া গেছে!`, 'success');
+            const successMsg = currentLanguage === 'bn' ? 
+                `${task.points || 10} পয়েন্টস পাওয়া গেছে!` : 
+                `Earned ${task.points || 10} points!`;
+            showToast(successMsg, 'success');
             
             const btn = document.getElementById(`btn-${taskId}`);
-            btn.innerHTML = '<i class="fas fa-check-circle"></i> সম্পূর্ণ';
+            const completeText = currentLanguage === 'bn' ? 'সম্পূর্ণ' : 'Complete';
+            btn.innerHTML = `<i class="fas fa-check-circle"></i> ${completeText}`;
             btn.classList.remove('active');
             btn.classList.add('done');
             btn.disabled = true;
@@ -1604,13 +2064,45 @@
             
         } catch (err) {
             setLoading(false);
-            showToast('ক্লেইম করতে সমস্যা', 'error');
+            showToast(currentLanguage === 'bn' ? 'ক্লেইম করতে সমস্যা' : 'Failed to claim', 'error');
         }
     }
 
     function refreshTasks() {
-        showToast('টাস্ক রিফ্রেশ করা হচ্ছে...', 'warning');
+        const refreshMsg = currentLanguage === 'bn' ? 
+            'টাস্ক রিফ্রেশ করা হচ্ছে...' : 'Refreshing tasks...';
+        showToast(refreshMsg, 'warning');
         loadTasks();
+    }
+
+    async function loadProfileData() {
+        try {
+            const snapshot = await db.ref('users/' + currentUser.uid).once('value');
+            const data = snapshot.val();
+            if (data) {
+                document.getElementById('profileName').textContent = data.name;
+                document.getElementById('profileEmail').textContent = data.email;
+                document.getElementById('profileType').textContent = 
+                    data.type === 'couple' ? (currentLanguage === 'bn' ? 'কাপল' : 'Couple') : 
+                    (currentLanguage === 'bn' ? 'সিঙ্গেল' : 'Single');
+                document.getElementById('profileLanguage').textContent = 
+                    data.language === 'bn' ? 'বাংলা' : 'English';
+            }
+        } catch (err) {
+            console.error(err);
+        }
+    }
+
+    function updateReferralStats() {
+        if (currentUser) {
+            db.ref('users/' + currentUser.uid).once('value').then(snapshot => {
+                const data = snapshot.val();
+                if (data) {
+                    document.getElementById('totalReferrals').textContent = data.invites || 0;
+                    document.getElementById('referralPoints').textContent = (data.invites || 0) * 50;
+                }
+            });
+        }
     }
 
     // ==================== REFERRAL FUNCTIONS ====================
@@ -1618,20 +2110,24 @@
         const text = document.getElementById('myRefLink').innerText;
         navigator.clipboard.writeText(text)
             .then(() => {
-                showToast('লিংক কপি করা হয়েছে!', 'success');
+                const msg = currentLanguage === 'bn' ? 'লিংক কপি করা হয়েছে!' : 'Link copied!';
+                showToast(msg, 'success');
             })
             .catch(err => {
-                showToast('কপি করতে সমস্যা', 'error');
+                const msg = currentLanguage === 'bn' ? 'কপি করতে সমস্যা' : 'Failed to copy';
+                showToast(msg, 'error');
             });
     }
 
     function shareLink() {
         const text = document.getElementById('myRefLink').innerText;
-        const shareText = `২০২৬ Valentine's Day Contest এ যোগ দিন! লিংক: ${text}`;
+        const shareText = currentLanguage === 'bn' ? 
+            `২০২৬ Valentine's Day Contest এ যোগ দিন! লিংক: ${text}` :
+            `Join Valentine's Day 2026 Contest! Link: ${text}`;
         
         if (navigator.share) {
             navigator.share({
-                title: 'Valentine Contest 2026',
+                title: currentLanguage === 'bn' ? 'Valentine Contest ২০২৬' : 'Valentine Contest 2026',
                 text: shareText,
                 url: text
             });
@@ -1670,6 +2166,16 @@
         }, 3000);
     }
 
+    function showError(elementId, message) {
+        const element = document.getElementById(elementId);
+        element.innerHTML = `
+            <div class="message error">
+                <i class="fas fa-exclamation-circle"></i>
+                <span>${message}</span>
+            </div>
+        `;
+    }
+
     function initOfflineDetection() {
         const offlineIndicator = document.getElementById('offlineIndicator');
         
@@ -1700,30 +2206,32 @@
         }
     }
 
-    // Prevent accidental refresh
-    window.addEventListener('beforeunload', function (e) {
-        if (currentUser) {
-            updateUserOnlineStatus(false);
-        }
-    });
+    function preventPullToRefresh() {
+        let touchStartY = 0;
+        
+        document.addEventListener('touchstart', e => {
+            touchStartY = e.touches[0].clientY;
+        }, { passive: true });
+        
+        document.addEventListener('touchmove', e => {
+            if (window.scrollY === 0 && e.touches[0].clientY > touchStartY + 10) {
+                e.preventDefault();
+            }
+        }, { passive: false });
+    }
 
     // Handle back button on mobile
     let backButtonPressed = false;
     window.addEventListener('popstate', function(event) {
         if (!backButtonPressed) {
             backButtonPressed = true;
-            showToast('আরেকবার ব্যাক প্রেস করলে বের হবেন', 'warning');
+            const msg = currentLanguage === 'bn' ? 
+                'আরেকবার ব্যাক প্রেস করলে বের হবেন' : 
+                'Press back again to exit';
+            showToast(msg, 'warning');
             setTimeout(() => backButtonPressed = false, 2000);
             history.pushState(null, null, window.location.pathname);
         }
-    });
-
-    // Add to home screen prompt
-    let deferredPrompt;
-    window.addEventListener('beforeinstallprompt', (e) => {
-        e.preventDefault();
-        deferredPrompt = e;
-        showToast('অ্যাপটি হোম স্ক্রিনে যোগ করতে পারেন', 'info');
     });
 </script>
 
