@@ -55,6 +55,44 @@
             padding-bottom: env(safe-area-inset-bottom);
         }
 
+        /* ====== LOADER ====== */
+        #loader {
+            position: fixed; 
+            top: 0; 
+            left: 0; 
+            width: 100%; 
+            height: 100%;
+            background: var(--bg-color); 
+            display: flex; 
+            flex-direction: column;
+            justify-content: center; 
+            align-items: center; 
+            z-index: 1000;
+            transition: opacity 0.3s;
+        }
+
+        .heart {
+            color: var(--primary-2026);
+            font-size: 3.5rem;
+            animation: heartBeat 1.5s infinite;
+            margin-bottom: 15px;
+        }
+
+        .loader-text {
+            margin-top: 10px; 
+            font-weight: 700; 
+            color: var(--primary-2026);
+            font-size: 1rem;
+        }
+
+        @keyframes heartBeat {
+            0% { transform: scale(1); }
+            14% { transform: scale(1.1); }
+            28% { transform: scale(1); }
+            42% { transform: scale(1.1); }
+            70% { transform: scale(1); }
+        }
+
         /* ====== LANGUAGE SWITCHER ====== */
         .language-switcher {
             position: fixed;
@@ -199,6 +237,11 @@
         textarea {
             min-height: 100px;
             line-height: 1.5;
+        }
+
+        .input-error {
+            border-color: var(--error) !important;
+            background: rgba(255, 68, 68, 0.05) !important;
         }
 
         /* ====== LANGUAGE SELECTION IN REGISTRATION ====== */
@@ -640,50 +683,6 @@
             to { opacity: 1; transform: translateX(0); }
         }
 
-        @keyframes heartBeat {
-            0% { transform: scale(1); }
-            14% { transform: scale(1.1); }
-            28% { transform: scale(1); }
-            42% { transform: scale(1.1); }
-            70% { transform: scale(1); }
-        }
-
-        @keyframes pulse {
-            0% { transform: scale(1); opacity: 1; }
-            50% { transform: scale(1.05); opacity: 0.8; }
-            100% { transform: scale(1); opacity: 1; }
-        }
-
-        /* ====== LOADER ====== */
-        #loader {
-            position: fixed; 
-            top: 0; 
-            left: 0; 
-            width: 100%; 
-            height: 100%;
-            background: var(--bg-color); 
-            display: flex; 
-            flex-direction: column;
-            justify-content: center; 
-            align-items: center; 
-            z-index: 1000;
-            transition: opacity 0.3s;
-        }
-
-        .heart {
-            color: var(--primary-2026);
-            font-size: 3.5rem;
-            animation: heartBeat 1.5s infinite;
-            margin-bottom: 15px;
-        }
-
-        .loader-text {
-            margin-top: 10px; 
-            font-weight: 700; 
-            color: var(--primary-2026);
-            font-size: 1rem;
-        }
-
         /* ====== MESSAGES ====== */
         .message {
             padding: 12px 15px;
@@ -803,7 +802,6 @@
             font-weight: 600;
             font-size: 0.9rem;
             box-shadow: 0 4px 12px rgba(255, 107, 107, 0.3);
-            animation: pulse 2s infinite;
         }
 
         .invite-requirement i {
@@ -1034,7 +1032,7 @@
 <!-- Loader -->
 <div id="loader">
     <div class="heart">❤️</div>
-    <p class="loader-text" id="loaderText">২০২৬ Valentine's Day...</p>
+    <p class="loader-text" id="loaderText">লোড হচ্ছে...</p>
 </div>
 
 <div class="container">
@@ -1392,19 +1390,6 @@
                 <p id="rule4"><strong>৪.</strong> যার যত বেশি ইনভাইট, জেতার সম্ভাবনা তত বেশি</p>
             </div>
         </div>
-
-        <!-- Invite Requirement Details -->
-        <div class="glass-card" style="margin-top: 15px; border-left: 4px solid var(--primary-2026);">
-            <h3 style="margin:0 0 12px 0; color: var(--text-dark); font-size: 1.1rem; display:flex; align-items:center; gap:8px;">
-                <i class="fas fa-users"></i> <span id="inviteDetailsTitle">ইনভাইট শর্ত</span>
-            </h3>
-            <div style="color: var(--text-light); font-size: 0.85rem; line-height: 1.5;">
-                <p><i class="fas fa-check" style="color: var(--success); margin-right: 8px;"></i> কমপক্ষে <strong>৩০ জন</strong> ইনভাইট করতে হবে</p>
-                <p><i class="fas fa-check" style="color: var(--success); margin-right: 8px;"></i> ইনভাইটেডরা রেজিস্ট্রেশন করতে হবে</p>
-                <p><i class="fas fa-check" style="color: var(--success); margin-right: 8px;"></i> কমপক্ষে ৫ টাস্ক সম্পন্ন করতে হবে</p>
-                <p><i class="fas fa-check" style="color: var(--success); margin-right: 8px;"></i> শুধু একটিভ ইউজারদের ইনভাইট কাউন্ট হবে</p>
-            </div>
-        </div>
     </div>
 
     <!-- Profile Section -->
@@ -1538,6 +1523,8 @@
     // Initialize Firebase
     if (!firebase.apps.length) {
         firebase.initializeApp(firebaseConfig);
+    } else {
+        firebase.app();
     }
     
     const auth = firebase.auth();
@@ -1551,7 +1538,7 @@
     let selectedLangOnRegister = 'bn';
     let dailyTaskCount = 0;
     let maxDailyTasks = 3;
-    let REQUIRED_INVITES = 30; // ৩০ জন ইনভাইট রিকোয়ারড
+    let REQUIRED_INVITES = 30;
     let shortRefCode = '';
 
     // ==================== TRANSLATIONS ====================
@@ -1560,7 +1547,7 @@
             // App
             appTitle: "Happy Valentine's",
             appSubtitle: "টাস্ক করুন, জিতুন পুরস্কার!",
-            loaderText: "২০২৬ Valentine's Day...",
+            loaderText: "লোড হচ্ছে...",
             
             // Auth
             loginTitle: "লগইন",
@@ -1645,7 +1632,6 @@
             rule2: "২. ৩০ জন ইনভাইট পুরস্কারের জন্য বাধ্যতামূলক",
             rule3: "৩. উইনার ঘোষণা: ১৪ ফেব্রুয়ারি, ২০২৬",
             rule4: "৪. যার যত বেশি ইনভাইট, জেতার সম্ভাবনা তত বেশি",
-            inviteDetailsTitle: "ইনভাইট শর্ত",
             
             // Profile Section
             profileTitle: "প্রোফাইল",
@@ -1671,577 +1657,729 @@
             navProfile: "প্রোফাইল",
             
             // Footer
-            footerLove: "সকলের জন্য ভালোবাসা",
-            
-            // Messages
-            offlineText: "আপনি অফলাইনে আছেন",
-            currentLang: "বাংলा"
+            footerLove: "সকলের জন্য ভালোবাসা"
         },
-        
         en: {
-            // English translations (same structure, different text)
-            // For brevity, keeping same as bn but would be English in real app
+            // App
+            appTitle: "Happy Valentine's",
+            appSubtitle: "Complete Tasks, Win Prizes!",
+            loaderText: "Loading...",
+            
+            // Auth
+            loginTitle: "Login",
+            emailLabel: "Email",
+            passwordLabel: "Password",
+            loginBtnText: "Login",
+            noAccountText: "No account?",
+            registerLinkText: "Register",
+            
+            registerTitle: "Registration",
+            preferredLangLabel: "Preferred Language",
+            accountTypeLabel: "Account Type",
+            singleOption: "Single",
+            coupleOption: "Couple",
+            yourNameLabel: "Your Name",
+            partnerNameLabel: "Partner's Name",
+            emailLabel2: "Email",
+            passwordLabel2: "Password",
+            registerBtnText: "Create Account",
+            haveAccountText: "Have an account?",
+            loginLinkText: "Login",
+            
+            // Invite Requirement
+            inviteRequirementText: "Invite at least 30 people for prizes!",
+            homeInviteRequirementText: "Invite at least 30 people for prizes!",
+            referralInviteRequirementText: "30 invites required for prizes!",
+            prizesInviteRequirementText: "30 invites mandatory for prizes!",
+            
+            // Dashboard
+            logoutText: "Logout",
+            inviteProgressLabel: "Invite Progress",
+            inviteProgressText: "0/30",
+            inviteTargetText: "Target: 30 Invites",
+            tasksText: "Tasks",
+            invitesText: "Invites",
+            pointsText: "Points",
+            rankText: "Rank",
+            
+            // Home Section
+            dailyReminderTitle: "Important Notice",
+            dailyTaskReminder: "3 tasks can be completed daily",
+            inviteRequirementNote: "30 invites mandatory for prizes",
+            winnerAnnouncement: "Winner Announcement: February 14",
+            quickActionsTitle: "Quick Actions",
+            viewTasksBtn: "View Tasks",
+            inviteBtn: "Invite",
+            
+            // Tasks Section
+            tasksTitle: "Tasks",
+            refreshText: "Refresh",
+            dailyLimit: "3/3",
+            taskInfoTitle: "Task Info",
+            taskInfoText: "3 tasks can be completed daily. 30 invites mandatory for prizes.",
+            
+            // Referral Section
+            referralTitle: "Invite Friends",
+            copyBtn: "Copy",
+            shareBtn: "Share",
+            referralInviteProgressLabel: "Invite Progress",
+            referralInviteProgressText: "0/30",
+            referralInviteTargetText: "Target: 30 Invites",
+            shareMessageTitle: "Share Message",
+            copyTextBtn: "Copy Text",
+            shareTextBtn: "Share Now",
+            referralStatsTitle: "Referral Stats",
+            totalReferralsLabel: "Total Referrals",
+            earnedPointsLabel: "Earned Points",
+            bonusInfoTitle: "Bonus Info",
+            bonusPoint1: "• 30 invites mandatory for prizes",
+            bonusPoint2: "• 50 points per referral",
+            bonusPoint3: "• 1000 bonus points for 30 invites",
+            bonusPoint4: "• More invites, higher winning chance",
+            
+            // Prizes Section
+            prizesTitle: "Prizes",
+            firstPrize: "1st Prize",
+            secondPrize: "2nd Prize",
+            thirdPrize: "3rd Prize",
+            specialPrizes: "Special",
+            contestRulesTitle: "Contest Rules",
+            rule1: "1. 3 tasks per day",
+            rule2: "2. 30 invites mandatory for prizes",
+            rule3: "3. Winners announced: Feb 14, 2026",
+            rule4: "4. More invites = Higher winning chance",
+            
+            // Profile Section
+            profileTitle: "Profile",
+            memberSince: "Member: Today",
+            profileInfoTitle: "Personal Info",
+            nameLabel: "Name:",
+            emailLabel3: "Email:",
+            accountTypeLabel2: "Account Type:",
+            languageLabel: "Language:",
+            profileInviteProgressLabel: "Invite Progress",
+            profileInviteProgressText: "0/30",
+            profileInviteTargetText: "Target: 30 Invites",
+            profileInviteNote: "Prizes require 30 invites",
+            settingsTitle: "Settings",
+            changeLanguageText: "Change Language",
+            logoutText2: "Logout",
+            
+            // Navigation
+            navHome: "Home",
+            navTasks: "Tasks",
+            navReferral: "Referral",
+            navPrizes: "Prizes",
+            navProfile: "Profile",
+            
+            // Footer
+            footerLove: "Love for everyone"
         }
     };
 
-    // ==================== INITIALIZATION ====================
+    // ==================== APP INITIALIZATION ====================
     document.addEventListener('DOMContentLoaded', function() {
-        // Load saved language preference
-        const savedLang = localStorage.getItem('valentine_lang') || 'bn';
+        // Set up language
+        const savedLang = localStorage.getItem('valentine2026_lang') || 'bn';
         currentLanguage = savedLang;
-        updateLanguageDisplay();
+        selectedLangOnRegister = savedLang;
+        updateLanguageUI();
         
-        // Apply language on page load
-        applyLanguage();
+        // Check offline status
+        checkOfflineStatus();
         
-        // Check for referral code
+        // Initialize app after 1.5 seconds
+        setTimeout(() => {
+            document.getElementById('loader').style.opacity = '0';
+            setTimeout(() => {
+                document.getElementById('loader').style.display = 'none';
+                initApp();
+            }, 300);
+        }, 1500);
+    });
+
+    function initApp() {
+        // Check for referral code in URL
         const urlParams = new URLSearchParams(window.location.search);
         const refCode = urlParams.get('ref');
         if (refCode) {
+            localStorage.setItem('referralCode', refCode);
             document.getElementById('refCodeInput').value = refCode;
-            showToast('রেফারেল লিংক পাওয়া গেছে!', 'success');
         }
         
-        // Initialize features
-        initOfflineDetection();
-        preventPullToRefresh();
-        
-        // Set loading initially
-        setLoading(true);
-        
-        // Auth listener
-        auth.onAuthStateChanged((user) => {
-            setLoading(false);
+        // Auth state listener
+        auth.onAuthStateChanged(user => {
             if (user) {
+                // User is signed in
                 currentUser = user;
-                showDashboard();
-                updateUserOnlineStatus(true);
-                document.getElementById('mobileNav').classList.remove('hidden');
                 loadUserData();
-                switchSection('home');
-                generateShareText();
-                generateShortRefCode();
+                showDashboard();
             } else {
+                // No user is signed in
                 showAuth();
-                updateUserOnlineStatus(false);
-                document.getElementById('mobileNav').classList.add('hidden');
-            }
-        });
-    });
-
-    // ==================== LOADER FUNCTIONS ====================
-    function setLoading(loading) {
-        document.getElementById('loader').style.display = loading ? 'flex' : 'none';
-        document.querySelectorAll('.btn-primary').forEach(btn => {
-            if (loading) {
-                btn.disabled = true;
             }
         });
     }
 
     // ==================== LANGUAGE FUNCTIONS ====================
+    function toggleLanguage() {
+        currentLanguage = currentLanguage === 'bn' ? 'en' : 'bn';
+        localStorage.setItem('valentine2026_lang', currentLanguage);
+        updateLanguageUI();
+        
+        // Show toast
+        showToast(currentLanguage === 'bn' ? 'ভাষা বাংলা তে পরিবর্তিত হয়েছে' : 'Language changed to English', 'success');
+    }
+
     function selectLanguage(lang) {
         selectedLangOnRegister = lang;
-        
-        document.querySelectorAll('.lang-option').forEach(option => {
-            option.classList.remove('selected');
+        document.querySelectorAll('.lang-option').forEach(el => {
+            el.classList.remove('selected');
         });
         event.target.closest('.lang-option').classList.add('selected');
     }
 
-    function toggleLanguage() {
-        currentLanguage = currentLanguage === 'bn' ? 'en' : 'bn';
-        localStorage.setItem('valentine_lang', currentLanguage);
-        applyLanguage();
-        
-        if (currentUser) {
-            db.ref('users/' + currentUser.uid + '/language').set(currentLanguage);
-        }
-        
-        showToast(currentLanguage === 'bn' ? 'ভাষা বাংলা তে পরিবর্তন করা হয়েছে' : 'Language changed to English', 'success');
-    }
-
-    function applyLanguage() {
+    function updateLanguageUI() {
         const lang = currentLanguage;
         const t = translations[lang];
         
+        // Update all elements with translations
         Object.keys(t).forEach(key => {
-            const element = document.getElementById(key);
-            if (element) {
-                if (element.tagName === 'INPUT' || element.tagName === 'TEXTAREA') {
-                    element.placeholder = t[key];
+            const elements = document.querySelectorAll(`[id="${key}"]`);
+            elements.forEach(el => {
+                if (el.tagName === 'INPUT' || el.tagName === 'TEXTAREA') {
+                    el.placeholder = t[key];
                 } else {
-                    element.textContent = t[key];
+                    el.textContent = t[key];
                 }
-            }
+            });
         });
         
-        document.getElementById('currentLang').textContent = t.currentLang;
+        // Update current language button
+        document.getElementById('currentLang').textContent = lang === 'bn' ? 'বাংলা' : 'English';
         
-        // Update invite progress texts
-        updateInviteProgressDisplay();
-    }
-
-    function updateLanguageDisplay() {
-        document.getElementById('currentLang').textContent = 
-            currentLanguage === 'bn' ? 'বাংলা' : 'English';
-    }
-
-    // ==================== INVITE PROGRESS FUNCTIONS ====================
-    function updateInviteProgress(inviteCount) {
-        const progress = Math.min((inviteCount / REQUIRED_INVITES) * 100, 100);
-        
-        // Update all progress bars
-        const progressBars = ['inviteProgressFill', 'referralInviteProgressFill', 'profileInviteProgressFill'];
-        const progressTexts = ['inviteProgressText', 'referralInviteProgressText', 'profileInviteProgressText'];
-        
-        progressBars.forEach(barId => {
-            const bar = document.getElementById(barId);
-            if (bar) bar.style.width = `${progress}%`;
-        });
-        
-        progressTexts.forEach(textId => {
-            const text = document.getElementById(textId);
-            if (text) text.textContent = `${inviteCount}/${REQUIRED_INVITES}`;
-        });
-        
-        // Update invite count display
-        document.getElementById('inviteCountDisplay').textContent = inviteCount;
-        document.getElementById('totalReferrals').textContent = inviteCount;
-        
-        // Calculate referral points (50 points per invite)
-        const referralPoints = inviteCount * 50;
-        document.getElementById('referralPoints').textContent = referralPoints;
-        
-        // Show/hide invite requirement based on count
-        const showRequirement = inviteCount < REQUIRED_INVITES;
-        document.getElementById('inviteRequirement').classList.toggle('hidden', !showRequirement);
-        
-        // Update rank based on invites
-        updateRank(inviteCount);
-    }
-
-    function updateInviteProgressDisplay() {
-        if (currentUser) {
-            db.ref('users/' + currentUser.uid + '/invites').once('value')
-                .then(snapshot => {
-                    const inviteCount = snapshot.val() || 0;
-                    updateInviteProgress(inviteCount);
-                });
-        }
-    }
-
-    function updateRank(inviteCount) {
-        let rank = 'নতুন';
-        if (inviteCount >= REQUIRED_INVITES) rank = '🥇 যোগ্য';
-        else if (inviteCount >= 20) rank = '🥈 প্রায়';
-        else if (inviteCount >= 10) rank = '🥉 শুরু';
-        else if (inviteCount >= 5) rank = '⭐ অগ্রগতি';
-        
-        document.getElementById('rankDisplay').textContent = rank;
-    }
-
-    // ==================== SHARE TEXT GENERATION ====================
-    function generateShareText() {
-        const userName = currentUser?.displayName || "আপনার বন্ধু";
-        const userRefLink = window.location.origin + window.location.pathname + "?ref=" + currentUser.uid;
-        const shortCode = shortRefCode ? ` (সংক্ষিপ্ত কোড: ${shortRefCode})` : '';
-        
-        const shareText = `
-প্রিয় বন্ধু,
-
-২০২৬ সালের Valentine's Day উপলক্ষ্যে একটি বিশেষ প্রতিযোগিতার আয়োজন করা হয়েছে। 
-এই প্রতিযোগিতায় অংশগ্রহণ করে আপনি জিততে পারেন আকর্ষণীয় নগদ পুরস্কার।
-
-🎯 প্রতিযোগিতার বিবরণ:
-• ১ম পুরস্কার: ১৫,০০০৳
-• ২য় পুরস্কার: ১,০০০৳  
-• ৩য় পুরস্কার: ৫০০৳
-• আরও ৭০টি স্পেশাল গিফট
-
-✅ অংশগ্রহণ পদ্ধতি:
-1. নিচের লিংকে ক্লিক করে রেজিস্ট্রেশন করুন
-2. সহজ টাস্কগুলো সম্পন্ন করুন
-3. বন্ধুদের আমন্ত্রণ জানান
-4. পয়েন্টস জমা করে পুরস্কার জিতুন
-
-🔗 রেজিস্ট্রেশন লিংক: ${userRefLink}${shortCode}
-
-আমার রেফারেল কোড ব্যবহার করে জয়েন করলে আমরা উভয়েই অতিরিক্ত বোনাস পাবো।
-
-ধন্যবাদান্তে,
-${userName}
-
-নোটিশ:
-• পুরস্কারের জন্য কমপক্ষে ৩০ জনকে ইনভাইট করতে হবে।
-• যাদের যত বেশি শেয়ার তাদের পয়েন্ট তত বেশি পাবেন। আর পয়েন্ট যত বেশি জেতার সম্ভাবনা তত বেশি।
-• উইনার ১৪ তারিখ ঘোষণা করা হবে। 
-• অবশ্যই ইউজারদের পেমেন্ট নং, ঠিকানা সব কিছু এড করতে হবে।
-• দৈনিক ৩ বার করে টাস্কগুলো সম্পূর্ণ করা যাবে।
-        `;
-        
-        document.getElementById('shareTextArea').value = shareText.trim();
-    }
-
-    function generateShortRefCode() {
-        if (currentUser) {
-            const uid = currentUser.uid;
-            // Generate 4-5 digit code from UID
-            const shortCode = Array.from(uid.slice(-4))
-                .map(c => (c.charCodeAt(0) % 9) + 1)
-                .join('');
-            
-            shortRefCode = shortCode;
-            
-            // Save to database
-            db.ref('users/' + currentUser.uid + '/shortCode').set(shortCode);
-            
-            // Update display
-            document.getElementById('shortRefLink').textContent = `সংক্ষিপ্ত কোড: ${shortCode}`;
-            
-            // Update main link
-            const refLink = window.location.origin + window.location.pathname + "?ref=" + shortCode;
-            document.getElementById('myRefLink').textContent = refLink;
-        }
-    }
-
-    function copyShareText() {
-        const textArea = document.getElementById('shareTextArea');
-        textArea.select();
-        textArea.setSelectionRange(0, 99999);
-        
-        navigator.clipboard.writeText(textArea.value)
-            .then(() => {
-                showToast('শেয়ার টেক্সট কপি করা হয়েছে!', 'success');
-            })
-            .catch(err => {
-                console.error('Copy failed:', err);
-                showToast('কপি করতে সমস্যা হয়েছে', 'error');
-            });
-    }
-
-    function shareWithMessage() {
-        const text = document.getElementById('shareTextArea').value;
-        
-        if (navigator.share) {
-            navigator.share({
-                title: 'Valentine\'s Day 2026 Contest',
-                text: text,
-                url: window.location.origin + window.location.pathname + "?ref=" + (shortRefCode || currentUser.uid)
-            }).then(() => {
-                showToast('সফলভাবে শেয়ার করা হয়েছে!', 'success');
-                trackShareActivity();
-            }).catch(err => {
-                console.error('Share failed:', err);
-                copyShareText();
-            });
-        } else {
-            copyShareText();
-        }
-    }
-
-    function trackShareActivity() {
-        if (currentUser) {
-            const today = new Date().toDateString();
-            db.ref(`users/${currentUser.uid}/shares/${today}`).transaction(current => {
-                return (current || 0) + 1;
-            });
-            
-            // Award points for sharing
-            db.ref(`users/${currentUser.uid}/points`).transaction(current => {
-                return (current || 0) + 5;
-            });
-        }
-    }
-
-    function showShareOptions() {
-        switchSection('referral');
-        setTimeout(() => {
-            document.getElementById('shareTextArea').scrollIntoView({ behavior: 'smooth' });
-        }, 100);
-    }
-
-    // ==================== DAILY TASK LIMIT ====================
-    function updateDailyTaskCount() {
-        if (currentUser) {
-            const today = new Date().toDateString();
-            db.ref(`users/${currentUser.uid}/dailyTasks/${today}`).once('value')
-                .then(snapshot => {
-                    const count = snapshot.val() || 0;
-                    dailyTaskCount = count;
-                    document.getElementById('dailyLimit').textContent = `${count}/${maxDailyTasks}`;
-                    
-                    // Color coding
-                    const dailyLimitEl = document.getElementById('dailyLimit');
-                    if (count >= maxDailyTasks) {
-                        dailyLimitEl.style.background = 'rgba(255, 68, 68, 0.1)';
-                        dailyLimitEl.style.color = '#ff4444';
-                    } else if (count >= maxDailyTasks - 1) {
-                        dailyLimitEl.style.background = 'rgba(255, 193, 7, 0.1)';
-                        dailyLimitEl.style.color = '#ff9800';
-                    } else {
-                        dailyLimitEl.style.background = 'rgba(0, 200, 83, 0.1)';
-                        dailyLimitEl.style.color = '#00c853';
-                    }
-                });
-        }
-    }
-
-    function canDoMoreTasks() {
-        return dailyTaskCount < maxDailyTasks;
+        // Update share text
+        updateShareText();
     }
 
     // ==================== AUTH FUNCTIONS ====================
-    function toggleAuth(form) {
-        if (form === 'register') {
+    function toggleAuth(type) {
+        if (type === 'register') {
             document.getElementById('loginForm').classList.add('hidden');
             document.getElementById('registerForm').classList.remove('hidden');
-            clearMessages();
         } else {
-            document.getElementById('loginForm').classList.remove('hidden');
             document.getElementById('registerForm').classList.add('hidden');
-            clearMessages();
+            document.getElementById('loginForm').classList.remove('hidden');
         }
     }
 
     function handleUserType() {
-        const type = document.getElementById('userType').value;
-        const pBox = document.getElementById('partnerInputBox');
-        if (type === 'couple') {
-            pBox.classList.remove('hidden');
-        } else {
-            pBox.classList.add('hidden');
-            document.getElementById('partnerName').value = '';
-        }
+        const userType = document.getElementById('userType').value;
+        document.getElementById('partnerInputBox').classList.toggle('hidden', userType !== 'couple');
     }
 
-    function validateEmail(email) {
-        const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        return re.test(email);
-    }
-
-    function validatePassword(password) {
-        return password.length >= 6;
-    }
-
-    function validateName(name) {
-        return name.trim().length >= 2;
-    }
-
-    function clearMessages() {
-        document.getElementById('loginMessage').innerHTML = '';
-        document.getElementById('registerMessage').innerHTML = '';
-        document.querySelectorAll('.input-group input, .input-group select').forEach(input => {
-            input.classList.remove('error');
-        });
-    }
-
-    function showError(elementId, message) {
-        const element = document.getElementById(elementId);
-        element.innerHTML = `
-            <div class="message error">
-                <i class="fas fa-exclamation-circle"></i>
-                <span>${message}</span>
-            </div>
-        `;
-    }
-
-    async function register() {
-        const email = document.getElementById('regEmail').value.trim();
-        const password = document.getElementById('regPass').value;
-        const name = document.getElementById('regName').value.trim();
-        const type = document.getElementById('userType').value;
-        const partner = document.getElementById('partnerName').value.trim();
-        const referrer = document.getElementById('refCodeInput').value.trim();
-        
-        clearMessages();
+    function login() {
+        const email = document.getElementById('loginEmail').value.trim();
+        const password = document.getElementById('loginPass').value.trim();
+        const loginBtn = document.querySelector('#loginForm .btn-primary');
+        const messageDiv = document.getElementById('loginMessage');
         
         // Validation
-        if (!validateName(name)) {
-            showError('registerMessage', 'নাম কমপক্ষে ২ অক্ষরের হতে হবে');
-            document.getElementById('regName').classList.add('error');
+        if (!email || !password) {
+            showMessage('error', translations[currentLanguage].emailLabel + ' এবং ' + translations[currentLanguage].passwordLabel + ' প্রয়োজন', messageDiv);
             return;
         }
         
-        if (type === 'couple' && !validateName(partner)) {
-            showError('registerMessage', 'পার্টনারের নাম কমপক্ষে ২ অক্ষরের হতে হবে');
-            document.getElementById('partnerName').classList.add('error');
-            return;
-        }
+        // Disable button and show loading
+        const originalText = loginBtn.innerHTML;
+        loginBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> লগইন হচ্ছে...';
+        loginBtn.disabled = true;
         
-        if (!validateEmail(email)) {
-            showError('registerMessage', 'সঠিক ইমেইল দিন');
-            document.getElementById('regEmail').classList.add('error');
-            return;
-        }
-        
-        if (!validatePassword(password)) {
-            showError('registerMessage', 'পাসওয়ার্ড কমপক্ষে ৬ অক্ষরের হতে হবে');
-            document.getElementById('regPass').classList.add('error');
-            return;
-        }
-        
-        setLoading(true);
-        
-        try {
-            // Check referrer if provided
-            if (referrer && referrer !== 'none') {
-                // First check by short code
-                const usersRef = db.ref('users');
-                const snapshot = await usersRef.orderByChild('shortCode').equalTo(referrer).once('value');
-                
-                let referrerUid = null;
-                if (snapshot.exists()) {
-                    // Found by short code
-                    const userData = Object.values(snapshot.val())[0];
-                    referrerUid = userData.uid;
-                } else {
-                    // Check by UID
-                    const refSnapshot = await db.ref('users/' + referrer).once('value');
-                    if (refSnapshot.exists()) {
-                        referrerUid = referrer;
-                    } else {
-                        showError('registerMessage', 'ভুল রেফারেল কোড');
-                        setLoading(false);
-                        return;
-                    }
+        auth.signInWithEmailAndPassword(email, password)
+            .then((userCredential) => {
+                showToast('লগইন সফল!', 'success');
+            })
+            .catch((error) => {
+                let errorMessage = 'লগইন ব্যর্থ হয়েছে';
+                if (error.code === 'auth/user-not-found') {
+                    errorMessage = 'অ্যাকাউন্ট খুঁজে পাওয়া যায়নি';
+                } else if (error.code === 'auth/wrong-password') {
+                    errorMessage = 'ভুল পাসওয়ার্ড';
+                } else if (error.code === 'auth/too-many-requests') {
+                    errorMessage = 'বহুসংখ্যক চেষ্টা, পরে চেষ্টা করুন';
                 }
-                
-                referrer = referrerUid;
-            }
-            
-            // Create user
-            const cred = await auth.createUserWithEmailAndPassword(email, password);
-            
-            const userData = {
-                uid: cred.user.uid,
-                email: email,
-                name: name,
-                type: type,
-                partnerName: type === 'couple' ? partner : "",
-                tasksCompleted: 0,
-                invites: 0,
-                points: 100,
-                invitedBy: referrer || "none",
-                completedTaskIds: {},
-                createdAt: Date.now(),
-                lastLogin: Date.now(),
-                isOnline: true,
-                year: 2026,
-                language: selectedLangOnRegister,
-                preferredLanguage: selectedLangOnRegister,
-                requiredInvites: REQUIRED_INVITES,
-                isEligibleForPrize: false
-            };
-            
-            await db.ref('users/' + cred.user.uid).set(userData);
-            
-            // Update referrer's invite count
-            if (referrer && referrer !== 'none') {
-                await db.ref('users/' + referrer + '/invites').transaction(cur => (cur || 0) + 1);
-                await db.ref('users/' + referrer + '/points').transaction(cur => (cur || 0) + 50);
-                
-                // Check if referrer reached required invites
-                const refSnapshot = await db.ref('users/' + referrer + '/invites').once('value');
-                const refInvites = refSnapshot.val() || 0;
-                if (refInvites >= REQUIRED_INVITES) {
-                    await db.ref('users/' + referrer + '/isEligibleForPrize').set(true);
-                    await db.ref('users/' + referrer + '/points').transaction(cur => (cur || 0) + 1000);
-                }
-            }
-            
-            // Set user's language preference
-            currentLanguage = selectedLangOnRegister;
-            localStorage.setItem('valentine_lang', currentLanguage);
-            applyLanguage();
-            
-            showToast('রেজিস্ট্রেশন সফল!', 'success');
-            setLoading(false);
-            
-        } catch (err) {
-            setLoading(false);
-            let errorMessage = 'রেজিস্ট্রেশন ব্যর্থ';
-            
-            switch (err.code) {
-                case 'auth/email-already-in-use':
-                    errorMessage = 'ইমেইলটি ইতিমধ্যে ব্যবহার করা হয়েছে';
-                    break;
-                case 'auth/weak-password':
-                    errorMessage = 'পাসওয়ার্ড শক্তিশালী করুন';
-                    break;
-                case 'auth/invalid-email':
-                    errorMessage = 'সঠিক ইমেইল দিন';
-                    break;
-                default:
-                    errorMessage = err.message;
-            }
-            
-            showError('registerMessage', errorMessage);
-        }
+                showMessage('error', errorMessage, messageDiv);
+                loginBtn.innerHTML = originalText;
+                loginBtn.disabled = false;
+            });
     }
 
-    async function login() {
-        const email = document.getElementById('loginEmail').value.trim();
-        const password = document.getElementById('loginPass').value;
+    function register() {
+        const name = document.getElementById('regName').value.trim();
+        const email = document.getElementById('regEmail').value.trim();
+        const password = document.getElementById('regPass').value.trim();
+        const userType = document.getElementById('userType').value;
+        const partnerName = userType === 'couple' ? document.getElementById('partnerName').value.trim() : '';
+        const refCode = document.getElementById('refCodeInput').value || localStorage.getItem('referralCode') || '';
+        const registerBtn = document.querySelector('#registerForm .btn-primary');
+        const messageDiv = document.getElementById('registerMessage');
         
-        clearMessages();
-        
-        if (!validateEmail(email)) {
-            showError('loginMessage', 'সঠিক ইমেইল দিন');
-            document.getElementById('loginEmail').classList.add('error');
+        // Validation
+        if (!name || !email || !password) {
+            showMessage('error', 'সব প্রয়োজনীয় তথ্য প্রদান করুন', messageDiv);
             return;
         }
         
-        if (!validatePassword(password)) {
-            showError('loginMessage', 'পাসওয়ার্ড দিন');
-            document.getElementById('loginPass').classList.add('error');
+        if (password.length < 6) {
+            showMessage('error', 'পাসওয়ার্ড কমপক্ষে ৬ অক্ষর হতে হবে', messageDiv);
             return;
         }
         
-        setLoading(true);
+        // Disable button and show loading
+        const originalText = registerBtn.innerHTML;
+        registerBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> অ্যাকাউন্ট তৈরি হচ্ছে...';
+        registerBtn.disabled = true;
         
-        try {
-            await auth.signInWithEmailAndPassword(email, password);
-            showToast('লগইন সফল!', 'success');
-            setLoading(false);
-        } catch (err) {
-            setLoading(false);
-            let errorMessage = 'লগইন ব্যর্থ';
-            
-            switch (err.code) {
-                case 'auth/user-not-found':
-                    errorMessage = 'ইমেইল খুঁজে পাওয়া যায়নি';
-                    break;
-                case 'auth/wrong-password':
-                    errorMessage = 'ভুল পাসওয়ার্ড';
-                    break;
-                case 'auth/user-disabled':
-                    errorMessage = 'অ্যাকাউন্ট নিষ্ক্রিয়';
-                    break;
-                default:
-                    errorMessage = err.message;
-            }
-            
-            showError('loginMessage', errorMessage);
-        }
+        auth.createUserWithEmailAndPassword(email, password)
+            .then((userCredential) => {
+                const user = userCredential.user;
+                const userId = user.uid;
+                const refId = generateReferralId();
+                
+                // Prepare user data
+                const userData = {
+                    name: name,
+                    email: email,
+                    userType: userType,
+                    partnerName: partnerName,
+                    language: selectedLangOnRegister,
+                    referralId: refId,
+                    points: 0,
+                    invites: 0,
+                    totalTasks: 0,
+                    completedTasks: {},
+                    dailyTasks: 0,
+                    lastTaskReset: new Date().toDateString(),
+                    createdAt: firebase.database.ServerValue.TIMESTAMP,
+                    refCode: refCode,
+                    requiredInvites: REQUIRED_INVITES
+                };
+                
+                // Save user data to database
+                return db.ref('users/' + userId).set(userData)
+                    .then(() => {
+                        // If there's a referral code, update referrer's data
+                        if (refCode) {
+                            return db.ref('users').orderByChild('referralId').equalTo(refCode).once('value')
+                                .then(snapshot => {
+                                    if (snapshot.exists()) {
+                                        const referrerData = snapshot.val();
+                                        const referrerId = Object.keys(referrerData)[0];
+                                        
+                                        // Update referrer's invite count
+                                        const referrerInvites = referrerData[referrerId].invites || 0;
+                                        return db.ref('users/' + referrerId).update({
+                                            invites: referrerInvites + 1,
+                                            points: (referrerData[referrerId].points || 0) + 50
+                                        });
+                                    }
+                                });
+                        }
+                    });
+            })
+            .then(() => {
+                showToast('অ্যাকাউন্ট সফলভাবে তৈরি হয়েছে!', 'success');
+                // Clear referral code from storage
+                localStorage.removeItem('referralCode');
+            })
+            .catch((error) => {
+                let errorMessage = 'রেজিস্ট্রেশন ব্যর্থ হয়েছে';
+                if (error.code === 'auth/email-already-in-use') {
+                    errorMessage = 'এই ইমেইল ইতিমধ্যে ব্যবহার করা হয়েছে';
+                } else if (error.code === 'auth/weak-password') {
+                    errorMessage = 'পাসওয়ার্ড খুব দুর্বল';
+                } else if (error.code === 'auth/invalid-email') {
+                    errorMessage = 'অবৈধ ইমেইল ঠিকানা';
+                }
+                showMessage('error', errorMessage, messageDiv);
+                registerBtn.innerHTML = originalText;
+                registerBtn.disabled = false;
+            });
     }
 
     function logout() {
-        if (currentUser) {
-            updateUserOnlineStatus(false);
-        }
-        auth.signOut();
-        showToast('লগআউট সফল', 'success');
+        auth.signOut()
+            .then(() => {
+                showToast('লগআউট সফল', 'success');
+                currentUser = null;
+            })
+            .catch((error) => {
+                showToast('লগআউট ব্যর্থ', 'error');
+            });
     }
 
-    function updateUserOnlineStatus(isOnline) {
-        if (currentUser) {
-            db.ref('users/' + currentUser.uid + '/isOnline').set(isOnline);
-            db.ref('users/' + currentUser.uid + '/lastLogin').set(Date.now());
+    // ==================== USER DASHBOARD FUNCTIONS ====================
+    function loadUserData() {
+        if (!currentUser) return;
+        
+        const userId = currentUser.uid;
+        
+        db.ref('users/' + userId).on('value', (snapshot) => {
+            const userData = snapshot.val();
+            if (userData) {
+                updateDashboardUI(userData);
+                loadTasks();
+                updateShareText();
+                
+                // Check if daily tasks need reset
+                checkDailyReset(userData);
+            }
+        });
+    }
+
+    function updateDashboardUI(userData) {
+        // User info
+        document.getElementById('userNameDisplay').textContent = userData.name;
+        document.getElementById('userTypeDisplay').textContent = userData.userType === 'couple' 
+            ? `কাপল (${userData.partnerName})` 
+            : 'সিঙ্গেল';
+        
+        // Profile section
+        document.getElementById('profileName').textContent = userData.name;
+        document.getElementById('profileEmail').textContent = userData.email;
+        document.getElementById('profileType').textContent = userData.userType === 'couple' ? 'কাপল' : 'সিঙ্গেল';
+        document.getElementById('profileLanguage').textContent = userData.language === 'bn' ? 'বাংলা' : 'English';
+        
+        // Stats
+        const completedTasksCount = userData.completedTasks ? Object.keys(userData.completedTasks).length : 0;
+        document.getElementById('taskCountDisplay').textContent = `${completedTasksCount}/${totalTasks}`;
+        document.getElementById('inviteCountDisplay').textContent = userData.invites || 0;
+        document.getElementById('pointsDisplay').textContent = userData.points || 0;
+        
+        // Rank calculation based on points
+        const rank = calculateRank(userData.points || 0);
+        document.getElementById('rankDisplay').textContent = rank;
+        
+        // Invite progress
+        const inviteCount = userData.invites || 0;
+        const progressPercent = Math.min((inviteCount / REQUIRED_INVITES) * 100, 100);
+        
+        // Update all progress bars
+        document.getElementById('inviteProgressFill').style.width = `${progressPercent}%`;
+        document.getElementById('referralInviteProgressFill').style.width = `${progressPercent}%`;
+        document.getElementById('profileInviteProgressFill').style.width = `${progressPercent}%`;
+        
+        // Update progress text
+        document.getElementById('inviteProgressText').textContent = `${inviteCount}/${REQUIRED_INVITES}`;
+        document.getElementById('referralInviteProgressText').textContent = `${inviteCount}/${REQUIRED_INVITES}`;
+        document.getElementById('profileInviteProgressText').textContent = `${inviteCount}/${REQUIRED_INVITES}`;
+        
+        // Update referral stats
+        document.getElementById('totalReferrals').textContent = inviteCount;
+        document.getElementById('referralPoints').textContent = (inviteCount * 50) + (inviteCount >= REQUIRED_INVITES ? 1000 : 0);
+        
+        // Show/hide invite requirement banners
+        const showRequirement = inviteCount < REQUIRED_INVITES;
+        document.getElementById('inviteRequirement').classList.toggle('hidden', !showRequirement);
+        document.getElementById('homeInviteRequirement').classList.toggle('hidden', !showRequirement);
+        
+        // Update daily task count
+        dailyTaskCount = userData.dailyTasks || 0;
+        document.getElementById('dailyLimit').textContent = `${dailyTaskCount}/${maxDailyTasks}`;
+        
+        // Update referral link
+        shortRefCode = userData.referralId ? userData.referralId.substring(0, 8) : 'ERROR';
+        const refLink = `${window.location.origin}${window.location.pathname}?ref=${userData.referralId}`;
+        document.getElementById('myRefLink').textContent = refLink;
+        document.getElementById('shortRefLink').textContent = `সংক্ষিপ্ত কোড: ${shortRefCode}`;
+    }
+
+    function calculateRank(points) {
+        if (points >= 10000) return '🥇 Gold';
+        if (points >= 5000) return '🥈 Silver';
+        if (points >= 1000) return '🥉 Bronze';
+        if (points >= 500) return '⭐ Star';
+        if (points >= 100) return '🔶 Advanced';
+        if (points >= 50) return '🔹 Intermediate';
+        return '🔸 Beginner';
+    }
+
+    function checkDailyReset(userData) {
+        const today = new Date().toDateString();
+        const lastReset = userData.lastTaskReset || today;
+        
+        if (lastReset !== today) {
+            // Reset daily task count
+            db.ref('users/' + currentUser.uid).update({
+                dailyTasks: 0,
+                lastTaskReset: today
+            });
         }
     }
 
-    // ==================== DASHBOARD FUNCTIONS ====================
+    // ==================== TASK FUNCTIONS ====================
+    function loadTasks() {
+        // Create default tasks if they don't exist
+        const defaultTasks = {
+            task1: {
+                title: "ভালোবাসার ছবি আপলোড",
+                description: "ভালোবাসার একটি ছবি আপলোড করুন",
+                points: 50
+            },
+            task2: {
+                title: "ভ্যালেন্টাইন শুভেচ্ছা পাঠান",
+                description: "একটি ভ্যালেন্টাইন শুভেচ্ছা মেসেজ তৈরি করুন",
+                points: 30
+            },
+            task3: {
+                title: "প্রেমের গল্প শেয়ার",
+                description: "আপনার প্রেমের গল্প শেয়ার করুন",
+                points: 40
+            },
+            task4: {
+                title: "ভিডিও দেখুন",
+                description: "ভ্যালেন্টাইন স্পেশাল ভিডিও দেখুন",
+                points: 20
+            },
+            task5: {
+                title: "কুইজে অংশগ্রহণ",
+                description: "ভ্যালেন্টাইন কুইজে অংশগ্রহণ করুন",
+                points: 25
+            }
+        };
+        
+        db.ref('tasks').once('value')
+            .then(snapshot => {
+                if (!snapshot.exists()) {
+                    // Create default tasks
+                    return db.ref('tasks').set(defaultTasks)
+                        .then(() => {
+                            currentTasks = defaultTasks;
+                            totalTasks = Object.keys(defaultTasks).length;
+                            displayTasks();
+                        });
+                } else {
+                    const tasks = snapshot.val();
+                    totalTasks = Object.keys(tasks).length;
+                    currentTasks = tasks;
+                    displayTasks();
+                }
+            })
+            .catch(error => {
+                console.error('Error loading tasks:', error);
+            });
+    }
+
+    function displayTasks() {
+        const taskList = document.getElementById('taskList');
+        taskList.innerHTML = '';
+        
+        if (!currentTasks) return;
+        
+        // Get user's completed tasks
+        db.ref('users/' + currentUser.uid + '/completedTasks').once('value')
+            .then(snapshot => {
+                const completedTasks = snapshot.val() || {};
+                
+                Object.keys(currentTasks).forEach((taskId, index) => {
+                    const task = currentTasks[taskId];
+                    const isCompleted = completedTasks[taskId];
+                    const taskNumber = index + 1;
+                    
+                    const taskCard = document.createElement('div');
+                    taskCard.className = 'task-card';
+                    taskCard.innerHTML = `
+                        <div class="task-info">
+                            <div class="task-icon">
+                                <i class="fas fa-${getTaskIcon(taskNumber)}"></i>
+                            </div>
+                            <div>
+                                <h4 style="margin:0; font-size:0.95rem;">${task.title || `টাস্ক ${taskNumber}`}</h4>
+                                <p style="margin:4px 0 0 0; font-size:0.8rem; color:var(--text-light);">
+                                    ${task.description || 'টাস্ক সম্পন্ন করুন'}
+                                </p>
+                                <p style="margin:4px 0 0 0; font-size:0.75rem; color:var(--primary-2026); font-weight:600;">
+                                    <i class="fas fa-coins"></i> ${task.points || 10} পয়েন্ট
+                                </p>
+                            </div>
+                        </div>
+                        <button class="btn-task ${isCompleted ? 'done' : (dailyTaskCount >= maxDailyTasks ? '' : 'active')}" 
+                                onclick="completeTask('${taskId}')" 
+                                ${isCompleted || dailyTaskCount >= maxDailyTasks ? 'disabled' : ''}>
+                            ${isCompleted ? '<i class="fas fa-check"></i> সম্পন্ন' : 
+                              dailyTaskCount >= maxDailyTasks ? 'সীমা শেষ' : 
+                              '<i class="fas fa-play"></i> শুরু করুন'}
+                        </button>
+                    `;
+                    
+                    taskList.appendChild(taskCard);
+                });
+            });
+    }
+
+    function getTaskIcon(number) {
+        const icons = ['heart', 'star', 'gift', 'gem', 'crown', 'award', 'trophy', 'medal'];
+        return icons[number % icons.length] || 'tasks';
+    }
+
+    function completeTask(taskId) {
+        if (dailyTaskCount >= maxDailyTasks) {
+            showToast('দৈনিক টাস্ক সীমা শেষ! আগামীকাল আবার চেষ্টা করুন', 'warning');
+            return;
+        }
+        
+        const task = currentTasks[taskId];
+        if (!task) return;
+        
+        // Update user data
+        const updates = {};
+        updates[`users/${currentUser.uid}/completedTasks/${taskId}`] = true;
+        updates[`users/${currentUser.uid}/points`] = firebase.database.ServerValue.increment(task.points || 10);
+        updates[`users/${currentUser.uid}/dailyTasks`] = firebase.database.ServerValue.increment(1);
+        
+        db.ref().update(updates)
+            .then(() => {
+                showToast(`টাস্ক সম্পন্ন! ${task.points || 10} পয়েন্ট পেয়েছেন`, 'success');
+                dailyTaskCount++;
+                document.getElementById('dailyLimit').textContent = `${dailyTaskCount}/${maxDailyTasks}`;
+                
+                // Refresh tasks display
+                setTimeout(() => {
+                    displayTasks();
+                }, 1000);
+            })
+            .catch(error => {
+                console.error('Error completing task:', error);
+                showToast('টাস্ক সম্পন্ন করতে সমস্যা হয়েছে', 'error');
+            });
+    }
+
+    function refreshTasks() {
+        loadTasks();
+        showToast('টাস্ক রিফ্রেশ করা হয়েছে', 'success');
+    }
+
+    // ==================== REFERRAL FUNCTIONS ====================
+    function copyLink() {
+        const refLink = document.getElementById('myRefLink').textContent;
+        navigator.clipboard.writeText(refLink)
+            .then(() => {
+                showToast('লিংক কপি করা হয়েছে!', 'success');
+            })
+            .catch(err => {
+                // Fallback method
+                const textArea = document.createElement('textarea');
+                textArea.value = refLink;
+                document.body.appendChild(textArea);
+                textArea.select();
+                document.execCommand('copy');
+                document.body.removeChild(textArea);
+                showToast('লিংক কপি করা হয়েছে!', 'success');
+            });
+    }
+
+    function copyShareText() {
+        const shareText = document.getElementById('shareTextArea').value;
+        navigator.clipboard.writeText(shareText)
+            .then(() => {
+                showToast('টেক্সট কপি করা হয়েছে!', 'success');
+            })
+            .catch(err => {
+                // Fallback method
+                const textArea = document.createElement('textarea');
+                textArea.value = shareText;
+                document.body.appendChild(textArea);
+                textArea.select();
+                document.execCommand('copy');
+                document.body.removeChild(textArea);
+                showToast('টেক্সট কপি করা হয়েছে!', 'success');
+            });
+    }
+
+    function showShareOptions() {
+        const shareText = document.getElementById('shareTextArea').value;
+        
+        if (navigator.share) {
+            navigator.share({
+                title: 'Valentine\'s Day 2026 Contest',
+                text: shareText.substring(0, 100) + '...',
+                url: document.getElementById('myRefLink').textContent
+            })
+            .then(() => console.log('Successful share'))
+            .catch((error) => {
+                // If share fails, try to copy link
+                copyLink();
+            });
+        } else {
+            // Fallback to copying link
+            copyLink();
+        }
+    }
+
+    function shareWithMessage() {
+        const shareText = document.getElementById('shareTextArea').value;
+        
+        if (navigator.share) {
+            navigator.share({
+                title: 'Valentine\'s Day 2026 Contest',
+                text: shareText,
+                url: document.getElementById('myRefLink').textContent
+            });
+        } else {
+            // Fallback for desktop or older browsers
+            const whatsappUrl = `https://wa.me/?text=${encodeURIComponent(shareText)}`;
+            window.open(whatsappUrl, '_blank');
+        }
+    }
+
+    function updateShareText() {
+        const lang = currentLanguage;
+        const inviteCount = parseInt(document.getElementById('inviteCountDisplay').textContent) || 0;
+        
+        let shareText = '';
+        
+        if (lang === 'bn') {
+            shareText = `🎉 Valentine's Day 2026 Contest 🎉
+
+💖 জয় করুন আকর্ষণীয় পুরস্কার!
+
+📱 টাস্ক করুন এবং পয়েন্ট সংগ্রহ করুন
+👥 বন্ধুদের ইনভাইট করুন
+🎁 জিতুন ১৫,০০০৳ সহ ৭০+ পুরস্কার!
+
+আমার রেফারেল লিংক: ${document.getElementById('myRefLink').textContent}
+
+সংক্ষিপ্ত কোড: ${shortRefCode}
+
+🔸 প্রতিদিন ৩টি টাস্ক করতে পারবেন
+🔸 ৩০ জন ইনভাইট করলে অতিরিক্ত ১০০০ পয়েন্ট
+🔸 ১৪ ফেব্রুয়ারি উইনার ঘোষণা
+
+আসুন, একসাথে Valentine's Day উদযাপন করি! ❤️`;
+        } else {
+            shareText = `🎉 Valentine's Day 2026 Contest 🎉
+
+💖 Win Exciting Prizes!
+
+📱 Complete tasks and earn points
+👥 Invite your friends
+🎁 Win 15,000৳ + 70+ gifts!
+
+My referral link: ${document.getElementById('myRefLink').textContent}
+
+Short code: ${shortRefCode}
+
+🔸 3 tasks per day
+🔸 1000 bonus points for 30 invites
+🔸 Winners announced on Feb 14
+
+Let's celebrate Valentine's Day together! ❤️`;
+        }
+        
+        document.getElementById('shareTextArea').value = shareText;
+    }
+
+    // ==================== NAVIGATION FUNCTIONS ====================
     function showAuth() {
         document.getElementById('authSection').classList.remove('hidden');
         document.getElementById('userDashboard').classList.add('hidden');
@@ -2252,260 +2390,9 @@ ${userName}
         document.getElementById('authSection').classList.add('hidden');
         document.getElementById('userDashboard').classList.remove('hidden');
         document.getElementById('mobileNav').classList.remove('hidden');
-        
-        generateShortRefCode();
-        loadUserData();
+        switchSection('home');
     }
 
-    async function loadUserData() {
-        try {
-            const snapshot = await db.ref('users/' + currentUser.uid).once('value');
-            const data = snapshot.val();
-            if (data) {
-                updateUserDisplay(data);
-                
-                // Load user's language preference
-                if (data.language) {
-                    currentLanguage = data.language;
-                    localStorage.setItem('valentine_lang', currentLanguage);
-                    applyLanguage();
-                }
-                
-                // Update invite progress
-                updateInviteProgress(data.invites || 0);
-                
-                // Update daily task count
-                updateDailyTaskCount();
-            }
-        } catch (err) {
-            showToast('ডাটা লোড করতে সমস্যা', 'error');
-        }
-    }
-
-    function updateUserStats(snapshot) {
-        const data = snapshot.val();
-        if (data) {
-            updateUserDisplay(data);
-            updateInviteProgress(data.invites || 0);
-        }
-    }
-
-    function updateUserDisplay(data) {
-        // User info
-        document.getElementById('userNameDisplay').textContent = 
-            data.name + (data.partnerName ? ' & ' + data.partnerName : '');
-        
-        document.getElementById('userTypeDisplay').textContent = 
-            data.type === 'couple' ? 'কাপল' : 'সিঙ্গেল';
-        
-        document.getElementById('profileName').textContent = data.name;
-        document.getElementById('profileEmail').textContent = data.email;
-        document.getElementById('profileType').textContent = 
-            data.type === 'couple' ? 'কাপল' : 'সিঙ্গেল';
-        document.getElementById('profileLanguage').textContent = 
-            data.language === 'bn' ? 'বাংলা' : 'English';
-        
-        // Task progress
-        const completedTasks = data.tasksCompleted || 0;
-        const progress = totalTasks > 0 ? Math.round((completedTasks / totalTasks) * 100) : 0;
-        
-        document.getElementById('taskCountDisplay').textContent = `${completedTasks}/${totalTasks}`;
-        document.getElementById('progressText').textContent = `${progress}%`;
-        document.getElementById('progressFill').style.width = `${progress}%`;
-        
-        // Points
-        document.getElementById('pointsDisplay').textContent = data.points || 0;
-        
-        // Update referral link
-        const shortCode = data.shortCode || currentUser.uid;
-        const refLink = window.location.origin + window.location.pathname + "?ref=" + shortCode;
-        document.getElementById('myRefLink').textContent = refLink;
-        
-        if (data.shortCode) {
-            document.getElementById('shortRefLink').textContent = `সংক্ষিপ্ত কোড: ${data.shortCode}`;
-        }
-    }
-
-    // ==================== TASK FUNCTIONS ====================
-    async function loadTasks() {
-        try {
-            const snapshot = await db.ref('tasks').once('value');
-            const tasks = snapshot.val();
-            const list = document.getElementById('taskList');
-            
-            if (!tasks || Object.keys(tasks).length === 0) {
-                list.innerHTML = `
-                    <div class="glass-card text-center" style="padding: 25px;">
-                        <i class="fas fa-tasks" style="font-size: 2.5rem; color: #ffccdc; margin-bottom: 12px;"></i>
-                        <h3 style="color: var(--text-dark); margin-bottom: 8px;">কোন টাস্ক নেই</h3>
-                        <p style="color: var(--text-light); font-size: 0.9rem;">টাস্ক শীঘ্রই যোগ করা হবে</p>
-                    </div>
-                `;
-                totalTasks = 0;
-                return;
-            }
-            
-            totalTasks = Object.keys(tasks).length;
-            currentTasks = tasks;
-            
-            const taskSnapshot = await db.ref('users/' + currentUser.uid + '/completedTaskIds').once('value');
-            const completedTasks = taskSnapshot.val() || {};
-            renderTasks(tasks, completedTasks);
-            
-        } catch (err) {
-            showToast('টাস্ক লোড করতে সমস্যা', 'error');
-        }
-    }
-
-    function renderTasks(tasks, completedTasks) {
-        const list = document.getElementById('taskList');
-        list.innerHTML = '';
-        
-        Object.keys(tasks).forEach((id, index) => {
-            const task = tasks[id];
-            const isDone = completedTasks.hasOwnProperty(id);
-            const taskNumber = index + 1;
-            
-            const startText = 'শুরু';
-            const completeText = 'সম্পূর্ণ';
-            const secondsText = 'সেকেন্ড';
-            const pointsText = 'পয়েন্টস';
-            
-            list.innerHTML += `
-                <div class="task-card ${isDone ? 'task-completed' : ''}" id="task-${id}">
-                    <div class="task-info">
-                        <div class="task-icon">
-                            ${getTaskIcon(task.category)}
-                        </div>
-                        <div style="flex: 1;">
-                            <div style="font-weight:700; font-size:0.95rem; color: var(--text-dark); margin-bottom: 4px;">
-                                #${taskNumber}: ${task.title}
-                            </div>
-                            <div style="display: flex; align-items: center; gap: 8px; font-size: 0.8rem; flex-wrap: wrap;">
-                                <span style="color: var(--text-light);">
-                                    <i class="fas fa-clock"></i> ${task.duration || 15}${secondsText}
-                                </span>
-                                <span style="background: #ffe6f0; color: var(--primary-2026); padding: 2px 6px; border-radius: 8px; font-weight: 600;">
-                                    <i class="fas fa-coins"></i> +${task.points || 10} ${pointsText}
-                                </span>
-                            </div>
-                        </div>
-                    </div>
-                    ${isDone ? 
-                        `<button class="btn-task done"><i class="fas fa-check"></i> ${completeText}</button>` : 
-                        `<button class="btn-task active" onclick="startTask('${id}', '${task.url}')" id="btn-${id}">
-                            <i class="fas fa-play"></i> ${startText}
-                        </button>`
-                    }
-                </div>
-            `;
-        });
-    }
-
-    function getTaskIcon(category) {
-        const icons = {
-            'social': '<i class="fab fa-facebook"></i>',
-            'video': '<i class="fas fa-video"></i>',
-            'website': '<i class="fas fa-globe"></i>',
-            'app': '<i class="fas fa-mobile-alt"></i>',
-            'survey': '<i class="fas fa-clipboard-check"></i>',
-            'general': '<i class="fas fa-star"></i>'
-        };
-        return icons[category] || '<i class="fas fa-heart"></i>';
-    }
-
-    function startTask(taskId, url) {
-        if (!canDoMoreTasks()) {
-            showToast('আজকের টাস্ক লিমিট শেষ! আগামীকাল আবার চেষ্টা করুন।', 'error');
-            return;
-        }
-        
-        const task = currentTasks[taskId];
-        if (!task) return;
-        
-        const btn = document.getElementById(`btn-${taskId}`);
-        const duration = task.duration || 15;
-        
-        // Open in new tab
-        window.open(url, '_blank', 'noopener,noreferrer');
-        
-        // Disable and start timer
-        btn.disabled = true;
-        btn.classList.remove('active');
-        btn.innerHTML = `<i class="fas fa-clock"></i> ${duration}s`;
-        
-        let secondsLeft = duration;
-        const timer = setInterval(() => {
-            secondsLeft--;
-            btn.innerHTML = `<i class="fas fa-clock"></i> ${secondsLeft}s`;
-            
-            if (secondsLeft <= 0) {
-                clearInterval(timer);
-                btn.innerHTML = '<i class="fas fa-check"></i> ক্লেইম';
-                btn.disabled = false;
-                btn.classList.add('active');
-                btn.onclick = function() {
-                    claimTask(taskId);
-                };
-                showToast('টাস্ক সম্পন্ন! ক্লেইম করুন', 'success');
-            }
-        }, 1000);
-        
-        btn.dataset.timer = timer;
-        showToast(`টাস্ক শুরু! ${duration} সেকেন্ড অপেক্ষা করুন`, 'info');
-    }
-
-    async function claimTask(taskId) {
-        if (!canDoMoreTasks()) {
-            showToast('আজকের টাস্ক লিমিট শেষ!', 'error');
-            return;
-        }
-        
-        const task = currentTasks[taskId];
-        if (!task) return;
-        
-        setLoading(true);
-        
-        try {
-            const updates = {};
-            updates[`users/${currentUser.uid}/completedTaskIds/${taskId}`] = true;
-            updates[`users/${currentUser.uid}/tasksCompleted`] = firebase.database.ServerValue.increment(1);
-            updates[`users/${currentUser.uid}/points`] = firebase.database.ServerValue.increment(task.points || 10);
-            
-            // Update daily task count
-            const today = new Date().toDateString();
-            updates[`users/${currentUser.uid}/dailyTasks/${today}`] = firebase.database.ServerValue.increment(1);
-            
-            await db.ref().update(updates);
-            
-            setLoading(false);
-            showToast(`${task.points || 10} পয়েন্টস পাওয়া গেছে!`, 'success');
-            
-            // Update daily task count display
-            updateDailyTaskCount();
-            
-            // Update button
-            const btn = document.getElementById(`btn-${taskId}`);
-            btn.innerHTML = '<i class="fas fa-check-circle"></i> সম্পূর্ণ';
-            btn.classList.remove('active');
-            btn.classList.add('done');
-            btn.disabled = true;
-            
-            const taskCard = document.getElementById(`task-${taskId}`);
-            taskCard.classList.add('task-completed');
-            
-        } catch (err) {
-            setLoading(false);
-            showToast('ক্লেইম করতে সমস্যা', 'error');
-        }
-    }
-
-    function refreshTasks() {
-        showToast('টাস্ক রিফ্রেশ করা হচ্ছে...', 'warning');
-        loadTasks();
-    }
-
-    // ==================== SECTION NAVIGATION ====================
     function switchSection(sectionId) {
         // Hide all sections
         document.querySelectorAll('.dashboard-section').forEach(section => {
@@ -2515,85 +2402,58 @@ ${userName}
         // Show selected section
         document.getElementById(sectionId + 'Section').classList.add('active');
         
-        // Update active nav item
+        // Update navigation
         document.querySelectorAll('.nav-item').forEach(item => {
             item.classList.remove('active');
         });
-        
-        const navItems = document.querySelectorAll('.nav-item');
-        const sectionIndex = ['home', 'tasks', 'referral', 'prizes', 'profile'].indexOf(sectionId);
-        if (navItems[sectionIndex]) {
-            navItems[sectionIndex].classList.add('active');
-        }
-        
-        // Load section-specific data
-        switch(sectionId) {
-            case 'tasks':
-                loadTasks();
-                break;
-            case 'referral':
-                updateInviteProgressDisplay();
-                break;
-            case 'profile':
-                break;
-        }
+        document.querySelector(`.nav-item[onclick*="${sectionId}"]`).classList.add('active');
     }
 
     // ==================== UTILITY FUNCTIONS ====================
-    function copyLink() {
-        const text = document.getElementById('myRefLink').innerText;
-        navigator.clipboard.writeText(text)
-            .then(() => {
-                showToast('লিংক কপি করা হয়েছে!', 'success');
-            })
-            .catch(err => {
-                showToast('কপি করতে সমস্যা', 'error');
-            });
+    function generateReferralId() {
+        return 'VAL' + Date.now().toString(36) + Math.random().toString(36).substr(2, 5).toUpperCase();
+    }
+
+    function showMessage(type, text, container) {
+        container.innerHTML = `
+            <div class="message ${type}">
+                <i class="fas fa-${type === 'error' ? 'exclamation-circle' : type === 'success' ? 'check-circle' : 'info-circle'}"></i>
+                ${text}
+            </div>
+        `;
+        
+        // Auto remove after 5 seconds
+        setTimeout(() => {
+            container.innerHTML = '';
+        }, 5000);
     }
 
     function showToast(message, type = 'info') {
-        const toastContainer = document.getElementById('toastContainer');
-        const toastId = 'toast-' + Date.now();
-        
         const toast = document.createElement('div');
         toast.className = `toast ${type}`;
-        toast.id = toastId;
         toast.innerHTML = `
             <i class="fas fa-${type === 'success' ? 'check-circle' : type === 'error' ? 'exclamation-circle' : 'info-circle'}"></i>
-            <span style="flex: 1;">${message}</span>
-            <i class="fas fa-times" onclick="document.getElementById('${toastId}').remove()" style="cursor:pointer; opacity:0.7;"></i>
+            <span>${message}</span>
         `;
         
-        toastContainer.appendChild(toast);
+        document.getElementById('toastContainer').appendChild(toast);
         
+        // Remove toast after 3 seconds
         setTimeout(() => {
-            const toastElement = document.getElementById(toastId);
-            if (toastElement) {
-                toastElement.style.opacity = '0';
-                toastElement.style.transform = 'translateY(20px)';
-                setTimeout(() => {
-                    if (toastElement.parentNode) {
-                        toastElement.parentNode.removeChild(toastElement);
-                    }
-                }, 300);
-            }
+            toast.remove();
         }, 3000);
     }
 
-    function initOfflineDetection() {
+    function checkOfflineStatus() {
         const offlineIndicator = document.getElementById('offlineIndicator');
+        const offlineText = document.getElementById('offlineText');
         
         function updateOnlineStatus() {
-            if (navigator.onLine) {
-                offlineIndicator.style.display = 'none';
-                if (currentUser) {
-                    updateUserOnlineStatus(true);
-                }
-            } else {
+            if (!navigator.onLine) {
                 offlineIndicator.style.display = 'block';
-                if (currentUser) {
-                    updateUserOnlineStatus(false);
-                }
+                offlineText.textContent = currentLanguage === 'bn' ? 'আপনি অফলাইনে আছেন' : 'You are offline';
+            } else {
+                offlineIndicator.style.display = 'none';
             }
         }
         
@@ -2601,30 +2461,6 @@ ${userName}
         window.addEventListener('offline', updateOnlineStatus);
         updateOnlineStatus();
     }
-
-    function preventPullToRefresh() {
-        let touchStartY = 0;
-        
-        document.addEventListener('touchstart', e => {
-            touchStartY = e.touches[0].clientY;
-        }, { passive: true });
-        
-        document.addEventListener('touchmove', e => {
-            if (window.scrollY === 0 && e.touches[0].clientY > touchStartY + 10) {
-                e.preventDefault();
-            }
-        }, { passive: false });
-    }
-
-    // ==================== FIREBASE REAL-TIME UPDATES ====================
-    // Listen for user data changes
-    function setupRealtimeUpdates() {
-        if (currentUser) {
-            db.ref('users/' + currentUser.uid).on('value', updateUserStats);
-            db.ref('tasks').on('value', loadTasks);
-        }
-    }
 </script>
-
 </body>
 </html>
